@@ -5,7 +5,6 @@
 {                                              }
 {                                              }
 /*///////////////////////////////////////////////
-using System;
 using System.IO;
 using UnityEngine;
 
@@ -19,9 +18,9 @@ public class SSHSocketReader
     protected BinaryReader FReader;
 
     // Разрешена загрузка созвездия
-    /*private const int C_PLANETAR_LOADED = 0x1000;
+    private const int C_PLANETAR_STARTED = 0x1000;
     // Разрешена загрузка галактики
-/*    private const int C_GALAXY_ACCEPT = 0x2F00;*/
+    private const int C_GALAXY_ACCEPT = 0x2F00;
     // Чат временно здесь
     private const int C_CHAT_MESSAGE = 0x0001;
 
@@ -35,22 +34,29 @@ public class SSHSocketReader
     protected virtual void DoRead(int ACommand, MemoryStream AReader)
     {
         // Пока такое решение, перебор
-        /*  if (ACommand == C_PLANETAR_LOADED)
-              DoReadPlanetarLoaded();
-  /*        else if (ACommand == C_GALAXY_ACCEPT)
-              DoReadGalaxyAccept();*/
-        /*else if (ACommand == C_CHAT_MESSAGE)
-            DoReadChatMessage();*/
-        Debug.Log("Invalid cmd " + ACommand);
+        if (ACommand == C_PLANETAR_STARTED)
+            DoReadPlanetarStarted();
+        else if (ACommand == C_GALAXY_ACCEPT)
+            DoReadGalaxyAccept();
+        else if (ACommand == C_CHAT_MESSAGE)
+            DoReadChatMessage();
+        else
+            Debug.Log("Invalid cmd " + ACommand);
     }
 
     // Чтение строки, сперва ее длина, затем буфер строки, Unicode
-    protected String DoReadString()
+    protected string DoReadString()
     {
         int LStrLen = FReader.ReadInt32();
         return System.Text.Encoding.UTF8.GetString(FReader.ReadBytes(LStrLen));
     }
-    
+
+    private void DoReadPlanetarStarted()
+    {
+        int tmpPlanetarID = FReader.ReadInt32();
+        SSHShared.ShowPlanetar(tmpPlanetarID);
+    }
+
     private void DoReadGalaxyAccept()
     {
         SSHShared.ShowGalaxy();
@@ -58,7 +64,7 @@ public class SSHSocketReader
 
     private void DoReadChatMessage()
     {
-        String LMessage = DoReadString();
+        string LMessage = DoReadString();
         SSHShared.UIChat.ShowMessage(LMessage);
     }
 }

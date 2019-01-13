@@ -1,0 +1,446 @@
+fileFormatVersion: 2
+guid: 5ea2ae567ac4ced40bcc80fa3e4aa881
+timeCreated: 1478021548
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Untitled-2_0
+    21300002: Untitled-2_1
+    21300004: Untitled-2_2
+    21300006: Untitled-2_3
+    21300008: Untitled-2_4
+    21300010: Untitled-2_5
+    21300012: Untitled-2_6
+    21300014: Untitled-2_7
+    21300016: Untitled-2_8
+    21300018: Untitled-2_9
+    21300020: Untitled-2_10
+    21300022: Untitled-2_11
+    21300024: Untitled-2_12
+    21300026: Untitled-2_13
+    21300028: Untitled-2_14
+    21300030: Untitled-2_15
+    21300032: Untitled-2_16
+    21300034: Untitled-2_17
+    21300036: Untitled-2_18
+    21300038: Untitled-2_19
+    21300040: Untitled-2_20
+    21300042: Untitled-2_21
+    21300044: Untitled-2_22
+    21300046: Untitled-2_23
+    21300048: Untitled-2_24
+    21300050: Untitled-2_25
+    21300052: Untitled-2_26
+    21300054: Untitled-2_27
+    21300056: Untitled-2_28
+    21300058: Untitled-2_29
+    21300060: Untitled-2_30
+    21300062: Untitled-2_31
+    21300064: Untitled-2_32
+    21300066: Untitled-2_33
+    21300068: Untitled-2_34
+    21300070: Untitled-2_35
+    21300072: Untitled-2_36
+    21300074: Untitled-2_37
+    21300076: Untitled-2_38
+    21300078: Untitled-2_39
+    21300080: Untitled-2_40
+    21300082: Untitled-2_41
+    21300084: Untitled-2_42
+    21300086: Untitled-2_43
+    21300088: Untitled-2_44
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: 1
+    aniso: -1
+    mipBias: -1
+    wrapMode: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Untitled-2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 209
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_1
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 209
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_2
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 209
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_3
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 209
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_4
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 209
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 158
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_6
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 158
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_7
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 158
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_8
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 158
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_9
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 158
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 107
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_11
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 107
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_12
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 107
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_13
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 107
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 107
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 56
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_16
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 56
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_17
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 56
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_18
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 56
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_19
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 56
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_21
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 5
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_22
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 5
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_23
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 5
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Untitled-2_24
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 5
+        width: 49
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

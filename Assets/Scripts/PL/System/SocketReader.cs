@@ -506,15 +506,17 @@ namespace Planetar
                 int LPosX = FReader.ReadInt32();
                 int LPosY = FReader.ReadInt32();
                 int LType = FReader.ReadInt32();
-                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType);
-                LPlanet.Owner = SSHShared.FindPlayer(FReader.ReadInt32());
-                LPlanet.State = (PlanetState)FReader.ReadInt32();
-                LPlanet.VisibleHard = FReader.ReadBoolean();
-                LPlanet.VisibleSoft = FReader.ReadBoolean();
-                LPlanet.ControlSelf = FReader.ReadInt32();
-                LPlanet.ControlFriend = FReader.ReadInt32();
-                LPlanet.ControlEnemy = FReader.ReadInt32();
-                LPlanet.IsBigHole = FReader.ReadBoolean();
+                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType)
+                {
+                    Owner = SSHShared.FindPlayer(FReader.ReadInt32()),
+                    State = (PlanetState)FReader.ReadInt32(),
+                    VisibleHard = FReader.ReadBoolean(),
+                    VisibleSoft = FReader.ReadBoolean(),
+                    ControlSelf = FReader.ReadInt32(),
+                    ControlFriend = FReader.ReadInt32(),
+                    ControlEnemy = FReader.ReadInt32(),
+                    IsBigHole = FReader.ReadBoolean()
+                };
                 Engine.MapPlanets.Add(LPlanet);
             }
             // Загрузка ссылок
