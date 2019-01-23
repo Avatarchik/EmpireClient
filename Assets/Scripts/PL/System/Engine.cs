@@ -19,6 +19,7 @@ namespace Planetar
     public struct TechInfo
     {
         public string Name;
+        public string Description;
         public bool Supported;
         public int Count;
         public int[] Levels;

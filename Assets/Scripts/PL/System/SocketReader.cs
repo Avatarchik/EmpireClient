@@ -101,6 +101,8 @@ namespace Planetar
         private const int C_SHIP_JUMP_TO = 0x1032;
         // Команда обновления количества топлива
         private const int C_SHIP_REFILL = 0x1033;
+        // Загрузка планетоидов системы
+        private const int PlanetarLoadPlanets = 0x1034;
 
         // Чтение буфера комманд
         protected override void DoRead(int ACommand, MemoryStream AReader)
@@ -170,6 +172,8 @@ namespace Planetar
                 DoReadPlanetUpdateTimer();
             else if (ACommand == C_LOAD_SYSTEM_BEGIN)
                 DoReadLoadSystemBegin();
+            else if (ACommand == PlanetarLoadPlanets)
+                DoReadLoadPlanetarPlanets();
             else if (ACommand == C_LOAD_SYSTEM_COMPLETE)
                 DoReadLoadSystemComplete();
             else if (ACommand == C_PLAYER_HANGAR_UPDATE)
@@ -489,11 +493,8 @@ namespace Planetar
             Engine.UIPlanetDetails.Storage.Clear(LPlanet, LIndex);
         }
 
-        private void DoReadLoadSystemBegin()
+        private void DoReadLoadPlanetarPlanets()
         {
-            // Размеры созвездия
-            Engine.MapSize.x = FReader.ReadInt32();
-            Engine.MapSize.y = FReader.ReadInt32();
             int LCount = FReader.ReadInt32();
             // Создадим координатную сетку
             for (int LSectorX = 0; LSectorX < Engine.MapSize.x; LSectorX++)
@@ -526,6 +527,13 @@ namespace Planetar
                 for (int LLink = 0; LLink < LLinkCount; LLink++)
                     Engine.MapPlanets[LIndex].Links.Add(Engine.MapPlanets[FReader.ReadInt32()]);
             }
+        }
+
+        private void DoReadLoadSystemBegin()
+        {
+            // Размеры созвездия
+            Engine.MapSize.x = FReader.ReadInt32();
+            Engine.MapSize.y = FReader.ReadInt32();
             // Установим свойства созвездия
             Engine.SceneManager.Load();
         }
@@ -572,11 +580,18 @@ namespace Planetar
                 // Перебор всех технологий
                 foreach (ShipTech LTech in Enum.GetValues(typeof(ShipTech)))
                 {
+                    if (LTech == ShipTech.Empty)
+                        continue;
+                    // Если теха не поддерживается - нет смысла ее считывать
+                    LTechInfo.Supported = FReader.ReadBoolean();
+                    if (!LTechInfo.Supported)
+                        continue;
                     // Сбор сведений
-                    LTechInfo.Name = LTech.ToString();
+                    LTechInfo.Name = FReader.ReadString();
+                    LTechInfo.Description = FReader.ReadString();fg
                     LTechInfo.Level = FReader.ReadInt32();
                     LTechInfo.Count = FReader.ReadInt32();
-                    LTechInfo.Supported = FReader.ReadBoolean();
+                    
                     LTechInfo.Levels = new int[6];
                     // Перебор уровней технлогий
                     for (int LIndex = 0; LIndex <= 5; LIndex++)
@@ -654,7 +669,7 @@ namespace Planetar
             int LCredits = FReader.ReadInt32();
             int LFuel = FReader.ReadInt32();
 
-            Engine.Player.Credits = LCredits + LGold;
+            Engine.Player.Credits = LCredits;
             Engine.Player.Fuel = LFuel;
 
             //        SRPlanetarShared.UserCredits.text = LCredits.ToString();

@@ -148,7 +148,7 @@ namespace Planetar
     // Типы боевых кораблей
     public enum ShipType
     {
-        // Пусто
+        // Пустой
         Empty,
         // Транспорт
         Transport,
