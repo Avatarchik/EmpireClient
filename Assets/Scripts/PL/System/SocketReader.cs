@@ -10,6 +10,7 @@
 /*///////////////////////////////////////////////
 using System;
 using System.IO;
+using UnityEngine;
 
 namespace Planetar
 {
@@ -101,12 +102,13 @@ namespace Planetar
         private const int C_SHIP_JUMP_TO = 0x1032;
         // Команда обновления количества топлива
         private const int C_SHIP_REFILL = 0x1033;
-        // Загрузка планетоидов системы
-        private const int PlanetarLoadPlanets = 0x1034;
+
+        private const int C_PLANETAR_LOAD_PLANETS = 0x1034;
 
         // Чтение буфера комманд
         protected override void DoRead(int ACommand, MemoryStream AReader)
         {
+            Debug.Log("Command: 0x" + ACommand.ToString("X"));
             // Пока такое решение, перебор
             if (ACommand == C_SHIP_UPDATE_HP)
                 DoReadShipUpdateHP();
@@ -172,8 +174,6 @@ namespace Planetar
                 DoReadPlanetUpdateTimer();
             else if (ACommand == C_LOAD_SYSTEM_BEGIN)
                 DoReadLoadSystemBegin();
-            else if (ACommand == PlanetarLoadPlanets)
-                DoReadLoadPlanetarPlanets();
             else if (ACommand == C_LOAD_SYSTEM_COMPLETE)
                 DoReadLoadSystemComplete();
             else if (ACommand == C_PLAYER_HANGAR_UPDATE)
@@ -196,8 +196,48 @@ namespace Planetar
                 DoReadInfoBuildings();
             else if (ACommand == C_INFO_WARSHIPS_LOAD)
                 DoReadInfoWarships();
+            else if (ACommand == C_PLANETAR_LOAD_PLANETS)
+                DoReadPlanetarLoadPlanets();
             else
                 base.DoRead(ACommand, AReader);
+        }
+
+        private void DoReadPlanetarLoadPlanets()
+        {
+            int LCount = FReader.ReadInt32();
+            // Создадим координатную сетку
+            for (int LSectorX = 0; LSectorX < Engine.MapSize.x; LSectorX++)
+            {
+                for (int LSectorY = 0; LSectorY < Engine.MapSize.y; LSectorY++)
+                    new Grid(Engine.UIPanelGrid, LSectorX, LSectorY);
+            }
+            // Загрузка планет
+            for (int LIndex = 0; LIndex < LCount; LIndex++)
+            {
+                int LUID = FReader.ReadInt32();
+                int LPosX = FReader.ReadInt32();
+                int LPosY = FReader.ReadInt32();
+                int LType = FReader.ReadInt32();
+                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType)
+                {
+                    Owner = SSHShared.FindPlayer(FReader.ReadInt32()),
+                    State = (PlanetState)FReader.ReadInt32(),
+                    VisibleHard = FReader.ReadBoolean(),
+                    VisibleSoft = FReader.ReadBoolean(),
+                    ControlSelf = FReader.ReadInt32(),
+                    ControlFriend = FReader.ReadInt32(),
+                    ControlEnemy = FReader.ReadInt32(),
+                    IsBigHole = FReader.ReadBoolean()
+                };
+                Engine.MapPlanets.Add(LPlanet);
+            }
+            // Загрузка ссылок
+            for (int LIndex = 0; LIndex < LCount; LIndex++)
+            {
+                int LLinkCount = FReader.ReadInt32();
+                for (int LLink = 0; LLink < LLinkCount; LLink++)
+                    Engine.MapPlanets[LIndex].Links.Add(Engine.MapPlanets[FReader.ReadInt32()]);
+            }
         }
 
         private void DoReadShipCreate()
@@ -207,17 +247,19 @@ namespace Planetar
             Planet LPlanet = Engine.PlanetByUID(FReader.ReadInt32());
             Landing LSlot = LPlanet.SlotByIndex(FReader.ReadInt32());
             ShipType LShipType = (ShipType)FReader.ReadInt32();
-            Ship LShip = new Ship(LOwner, LUID, LSlot, LShipType);
-            LShip.State = (ShipState)FReader.ReadInt32();
-            LShip.Mode = (ShipMode)FReader.ReadInt32();
-            LShip.AttachedPlanet = Engine.PlanetByUID(FReader.ReadInt32());
-            LShip.Count = FReader.ReadInt32();
-            LShip.HP = FReader.ReadInt32();
-            LShip.Fuel = FReader.ReadInt32();
-            LShip.IsCapture = FReader.ReadBoolean();
-            LShip.IsAutoTarget = FReader.ReadBoolean();
-            LShip.Landing = LSlot;
-            LShip.Planet = LPlanet;
+            Ship LShip = new Ship(LOwner, LUID, LSlot, LShipType)
+            {
+                State = (ShipState)FReader.ReadInt32(),
+                Mode = (ShipMode)FReader.ReadInt32(),
+                AttachedPlanet = Engine.PlanetByUID(FReader.ReadInt32()),
+                Count = FReader.ReadInt32(),
+                HP = FReader.ReadInt32(),
+                Fuel = FReader.ReadInt32(),
+                IsCapture = FReader.ReadBoolean(),
+                IsAutoTarget = FReader.ReadBoolean(),
+                Landing = LSlot,
+                Planet = LPlanet
+            };
             LShip.Planet.Ships.Add(LShip);
             LShip.Init();
             Engine.MapShips.Add(LUID, LShip);
@@ -493,42 +535,6 @@ namespace Planetar
             Engine.UIPlanetDetails.Storage.Clear(LPlanet, LIndex);
         }
 
-        private void DoReadLoadPlanetarPlanets()
-        {
-            int LCount = FReader.ReadInt32();
-            // Создадим координатную сетку
-            for (int LSectorX = 0; LSectorX < Engine.MapSize.x; LSectorX++)
-                for (int LSectorY = 0; LSectorY < Engine.MapSize.y; LSectorY++)
-                    new Grid(Engine.UIPanelGrid, LSectorX, LSectorY);
-            // Загрузка планет
-            for (int LIndex = 0; LIndex < LCount; LIndex++)
-            {
-                int LUID = FReader.ReadInt32();
-                int LPosX = FReader.ReadInt32();
-                int LPosY = FReader.ReadInt32();
-                int LType = FReader.ReadInt32();
-                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType)
-                {
-                    Owner = SSHShared.FindPlayer(FReader.ReadInt32()),
-                    State = (PlanetState)FReader.ReadInt32(),
-                    VisibleHard = FReader.ReadBoolean(),
-                    VisibleSoft = FReader.ReadBoolean(),
-                    ControlSelf = FReader.ReadInt32(),
-                    ControlFriend = FReader.ReadInt32(),
-                    ControlEnemy = FReader.ReadInt32(),
-                    IsBigHole = FReader.ReadBoolean()
-                };
-                Engine.MapPlanets.Add(LPlanet);
-            }
-            // Загрузка ссылок
-            for (int LIndex = 0; LIndex < LCount; LIndex++)
-            {
-                int LLinkCount = FReader.ReadInt32();
-                for (int LLink = 0; LLink < LLinkCount; LLink++)
-                    Engine.MapPlanets[LIndex].Links.Add(Engine.MapPlanets[FReader.ReadInt32()]);
-            }
-        }
-
         private void DoReadLoadSystemBegin()
         {
             // Размеры созвездия
@@ -571,7 +577,6 @@ namespace Planetar
 
         private void DoReadPlayerTechShipCreate()
         {
-            TechInfo LTechInfo;
             // Перебор всех корабликов
             foreach (ShipType LShip in Enum.GetValues(typeof(ShipType)))
             {
@@ -582,22 +587,21 @@ namespace Planetar
                 {
                     if (LTech == ShipTech.Empty)
                         continue;
-                    // Если теха не поддерживается - нет смысла ее считывать
+                    TechInfo LTechInfo = new TechInfo();
                     LTechInfo.Supported = FReader.ReadBoolean();
-                    if (!LTechInfo.Supported)
-                        continue;
-                    // Сбор сведений
-                    LTechInfo.Name = FReader.ReadString();
-                    LTechInfo.Description = FReader.ReadString();fg
-                    LTechInfo.Level = FReader.ReadInt32();
-                    LTechInfo.Count = FReader.ReadInt32();
-                    
-                    LTechInfo.Levels = new int[6];
-                    // Перебор уровней технлогий
-                    for (int LIndex = 0; LIndex <= 5; LIndex++)
-                        LTechInfo.Levels[LIndex] = FReader.ReadInt32();
-                    // Установим текущее значение техи
-                    LTechInfo.Value = LTechInfo.Levels[LTechInfo.Level];
+                    if (LTechInfo.Supported)
+                    {
+                        // Сбор сведений
+                        LTechInfo.Name = LTech.ToString();
+                        LTechInfo.Level = FReader.ReadInt32();
+                        LTechInfo.Count = FReader.ReadInt32();
+                        LTechInfo.Levels = new int[6];
+                        // Перебор уровней технлогий
+                        for (int LIndex = 0; LIndex < LTechInfo.Count; LIndex++)
+                            LTechInfo.Levels[LIndex] = FReader.ReadInt32();
+                        // Установим текущее значение техи
+                        LTechInfo.Value = LTechInfo.Levels[LTechInfo.Level];
+                    }
                     Engine.TechShip(LShip, LTech, LTechInfo);
                 }
             }
@@ -620,8 +624,7 @@ namespace Planetar
                     LTechInfo.Name = LTech.ToString();
                     LTechInfo.Level = FReader.ReadInt32();
                     LTechInfo.Count = FReader.ReadInt32();
-                    LTechInfo.Supported = FReader.ReadBoolean();
-                    LTechInfo.Levels = new int[6];
+                    LTechInfo.Levels = new int[6];/*TODO count*/
                     // Перебор уровней технологий
                     for (int LIndex = 0; LIndex <= 5; LIndex++)
                         LTechInfo.Levels[LIndex] = FReader.ReadInt32();
@@ -669,7 +672,7 @@ namespace Planetar
             int LCredits = FReader.ReadInt32();
             int LFuel = FReader.ReadInt32();
 
-            Engine.Player.Credits = LCredits;
+            Engine.Player.Credits = LCredits + LGold;
             Engine.Player.Fuel = LFuel;
 
             //        SRPlanetarShared.UserCredits.text = LCredits.ToString();
