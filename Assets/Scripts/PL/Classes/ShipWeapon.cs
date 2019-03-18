@@ -15,8 +15,6 @@ namespace Planetar
     public class ShipWeapon : Object
     {
         // Цель полета снаряда
-        public Planet Planet;
-        // Цель полета снаряда
         public Ship Ship;
 
         // Наш объект
@@ -50,17 +48,9 @@ namespace Planetar
         }
 
         // Задание цели для атаки
-        public void Retarget(Planet APlanet, Ship AShip)
+        public void Retarget(Ship AShip)
         {
-            Planet = APlanet;
             Ship = AShip;
-        }
-
-        // Задание цели для атаки
-        public void Clear()
-        {
-            Planet = null;
-            Ship = null;
         }
 
         // Конструктор орудия

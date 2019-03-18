@@ -609,7 +609,7 @@ namespace Planetar
             FSelf.Transform.SetParent(FSelf.Landing.Transform, false);
             FSelf.Planet.Ships.Add(FSelf);
             foreach (ShipWeapon LWeapon in FSelf.Weapons)
-                LWeapon.Clear();
+                LWeapon.Retarget(null);
         }
 
         // Команда физического перемещения кораблика

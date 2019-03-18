@@ -312,10 +312,9 @@ namespace Planetar
         {
             Ship LShip = Engine.ShipByUID(FReader.ReadInt32());
             ShipWeaponType LWeaponeType = (ShipWeaponType)FReader.ReadInt32();
-            Planet LPlanetTarget = Engine.PlanetByUID(FReader.ReadInt32());
             Ship LShipTarget = Engine.ShipByUID(FReader.ReadInt32());
 
-            LShip.Weapon(LWeaponeType).Retarget(LPlanetTarget, LShipTarget);
+            LShip.Weapon(LWeaponeType).Retarget(LShipTarget);
         }
 
         private void DoReadShipAttach()
@@ -609,7 +608,6 @@ namespace Planetar
 
         private void DoReadPlayerTechBuildingCreate()
         {
-            TechInfo LTechInfo;
             // Перебор всех строений
             foreach (BuildingType LBuildingType in Enum.GetValues(typeof(BuildingType)))
             {
@@ -620,16 +618,21 @@ namespace Planetar
                 {
                     if (LTech == BuildingTech.Empty)
                         continue;
-                    // Сбор сведений
-                    LTechInfo.Name = LTech.ToString();
-                    LTechInfo.Level = FReader.ReadInt32();
-                    LTechInfo.Count = FReader.ReadInt32();
-                    LTechInfo.Levels = new int[6];/*TODO count*/
-                    // Перебор уровней технологий
-                    for (int LIndex = 0; LIndex <= 5; LIndex++)
-                        LTechInfo.Levels[LIndex] = FReader.ReadInt32();
-                    // Установим текущее значение техи
-                    LTechInfo.Value = LTechInfo.Levels[LTechInfo.Level];
+                    TechInfo LTechInfo = new TechInfo();
+                    LTechInfo.Supported = FReader.ReadBoolean();
+                    if (LTechInfo.Supported)
+                    {
+                        // Сбор сведений
+                        LTechInfo.Name = LTech.ToString();
+                        LTechInfo.Level = FReader.ReadInt32();
+                        LTechInfo.Count = FReader.ReadInt32();
+                        LTechInfo.Levels = new int[6];/*TODO count*/
+                        // Перебор уровней технологий
+                        for (int LIndex = 0; LIndex <= 5; LIndex++)
+                            LTechInfo.Levels[LIndex] = FReader.ReadInt32();
+                        // Установим текущее значение техи
+                        LTechInfo.Value = LTechInfo.Levels[LTechInfo.Level];
+                    }
                     Engine.TechBuilding(LBuildingType, LTech, LTechInfo);
                 }
             }
