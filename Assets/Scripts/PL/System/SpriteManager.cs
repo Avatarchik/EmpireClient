@@ -100,18 +100,18 @@ namespace Planetar
             if ((APlanet.PlanetType == PlanetType.Hole) && (APlanet.State == PlanetState.Inactive))
                 return null;
             // Враг и наложение
-            else if (APlanet.ControlEnemy > 0)
+            else if (APlanet.IsCoverageEnemy)
             {
-                if (APlanet.ControlSelf > 0 || APlanet.ControlFriend > 0)
+                if (APlanet.IsCoverageSelf || APlanet.IsCoverageFriends)
                     LSprite = "PL/Radar/Textures/PLRadarMapControlBoth";
                 else
                     LSprite = "PL/Radar/Textures/PLRadarMapControlEnemy";
             }
             // Свой
-            else if (APlanet.ControlSelf > 0)
+            else if (APlanet.IsCoverageSelf)
                 LSprite = "PL/Radar/Textures/PLRadarMapControlSelf";
             // Союзник
-            else if (APlanet.ControlFriend > 0)
+            else if (APlanet.IsCoverageFriends)
                 LSprite = "PL/Radar/Textures/PLRadarMapControlFriend";
             // Вернем спрайт
             return Resources.Load<Sprite>(LSprite);

@@ -7,9 +7,11 @@
 /*///////////////////////////////////////////////
 using UnityEngine;
 using System.IO;
+using System;
 
 public class SWESocketReader : SSHSocketReader
 {
+    private const int PlanetarStarted = 0x1000;
     // Авторизация провалена
     private const int CmdLoginFailed = 0x0003;
     // Авторизация успешна
@@ -25,8 +27,10 @@ public class SWESocketReader : SSHSocketReader
             DoReadLoginAccept();
         else if (ACommand == CmdLoginFailed)
             DoReadLoginFailed();
-        else if (ACommand == CmdPlanetarAvailable)
-            DoReadPlanetarAvailable();
+        else if (ACommand == PlanetarAvailable)
+            ReadPlanetarAvailable();
+        else if (ACommand == PlanetarStarted)
+            ReadPlanetarStarted();
         else
             base.DoRead(ACommand, AReader);
     }
@@ -52,14 +56,17 @@ public class SWESocketReader : SSHSocketReader
     }
 
     // Оповещение о доступности созвездия
-    private void DoReadPlanetarAvailable()
+    private void ReadPlanetarAvailable()
     {
         int LPlanetarID = FReader.ReadInt32();
         int LErrorCode = FReader.ReadInt32();
-        // Запустим созвездие если доступно
-        if (LErrorCode == 0)
-            SSHShared.ShowPlanetar(LPlanetarID);
-        else
-            SWEShared.UIPanelAuth.ShowError(LErrorCode);
+        SWEShared.UIPanelAuth.PlanetarAvailable(LPlanetarID, LErrorCode);       
+    }
+
+
+    private void ReadPlanetarStarted()
+    {
+        int LPlanetarID = FReader.ReadInt32();
+        SWEShared.UIPanelAuth.PlanetarAvailable(LPlanetarID, 0);
     }
 }

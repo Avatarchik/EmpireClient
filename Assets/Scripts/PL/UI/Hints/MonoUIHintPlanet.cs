@@ -49,9 +49,9 @@ namespace Planetar
                 LDescription += "Роль: " + APlanet.Owner.Role.ToString() + "\r\n";
                 LDescription += "Подписка: " + APlanet.Subscription.ToString() + "\r\n";
                 LDescription += "\r\n";
-                LDescription += "Контроль свой: - " + APlanet.ControlSelf.ToString() + "\r\n";
-                LDescription += "Контроль союз: - " + APlanet.ControlFriend.ToString() + "\r\n";
-                LDescription += "Контроль враг: - " + APlanet.ControlEnemy.ToString() + "\r\n";
+                LDescription += "Контроль свой: - " + APlanet.IsCoverageSelf.ToString() + "\r\n";
+                LDescription += "Контроль союз: - " + APlanet.IsCoverageFriends.ToString() + "\r\n";
+                LDescription += "Контроль враг: - " + APlanet.IsCoverageEnemy.ToString() + "\r\n";
                 LDescription += "\r\n";
                 LDescription += "Верфи: " + APlanet.ShipyardsCount.ToString() + "\r\n";
                 LDescription += "Модули: " + APlanet.ModulesCount.ToString() + "\r\n";

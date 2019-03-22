@@ -201,6 +201,8 @@ public class SSHShared
 
     public static void ShowPlanetar(int APlanetarID)
     {
+        if (PlanetarID == APlanetarID)
+            return;
         PlanetarID = APlanetarID;
         SSHControls.ShowLoading("Система найдена, загрузка...");
         SceneManager.LoadSceneAsync("Planetar");

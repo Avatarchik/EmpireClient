@@ -26,6 +26,7 @@ public class MWEUIPanelAuth : MSHUIMonoBehavior
     public Toggle TestServer;
     // Сообщение о возникшей ошибке
     public Text ErrorText;
+    public Text ProgressText;
     // Кнопка входа
     public Button ButtonLogin;
     // Панель входа
@@ -148,10 +149,19 @@ public class MWEUIPanelAuth : MSHUIMonoBehavior
             FLastError = "Неверный Email или пароль";
         else if (AErrorCode == 0x1F01)
             FLastError = "Созвездие не загружено";
-        else if (AErrorCode == 0x1F02)
-            FLastError = "Созвездие в процессе запуска";
         else
             FLastError = "Неизвестная ошибка " + AErrorCode;
+    }
+
+    public void PlanetarAvailable(int APlanetarID, int AErrorCode)
+    {
+        // Запустим созвездие если доступно
+        if (AErrorCode == 0)
+            SSHShared.ShowPlanetar(APlanetarID);
+        else if (AErrorCode == 0x1F02)
+            ProgressText.text = "Запуск созвездия...";
+        else if (AErrorCode != 0x1F02)
+            SWEShared.UIPanelAuth.ShowError(AErrorCode);
     }
 
     public void SavePassword(String APassword)

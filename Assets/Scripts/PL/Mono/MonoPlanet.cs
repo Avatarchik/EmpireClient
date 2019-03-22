@@ -76,9 +76,9 @@ namespace Planetar
         // Расстояние до торгового слотв
         private const float C_TradeSlotRange = 0.7f;
         // Количество боевых слотов
-        private const int C_FightSlotCount = 15;
+        private const int C_FightSlotCount = 14;
         // Количество слотов с экономическими
-        private const int C_TotalSlotCount = 20;
+        private const int C_TotalSlotCount = C_FightSlotCount + 5;
         // Скорость вращения слотов
         private const float C_SlotsSpeed = 0.005f;
         // Дельта смещения активации установки торгового пути
@@ -98,11 +98,9 @@ namespace Planetar
         private Planet FSelf;
 
         // Массив слотов
-        private Landing[] FLanding = new Landing[C_TotalSlotCount];
+        private Landing[] FLanding;
         // Признак отображения внутренних слотов
         private bool FIsShowInnerSlots;
-        // Признак инициализированного планетоида
-        private bool FIsLoaded;
         // Угол вращения слотов
         private float FSlotsAngle = 0;
 
@@ -142,10 +140,10 @@ namespace Planetar
             // Скроем сферу ЧТ
             if (FSelf.PlanetType == PlanetType.Hole)
                 DoShowSphere(false);
-            // Обновим базовые данные на миникарте
-            UpdateMinimap(true, true, true);
             // Обновим имя на карте
             DoUpdateName();
+            // Обновим миникарту
+            UpdateMinimap(true, true, true);
         }
 
         protected override void DoOnBecameVisible()
@@ -172,7 +170,7 @@ namespace Planetar
                 if (FSelf.State == PlanetState.Active)
                 {
                     if ((FSelf.IsBigHole) || ((!FSelf.IsTiming) && (!FSelf.InBattle)
-                        && ((FSelf.ControlEnemy == 0) || (FSelf.Owner.Role == SSHRole.Friend) || (FSelf.Owner.Role == SSHRole.Self))))
+                        && ((!FSelf.IsCoverageEnemy) || (FSelf.Owner.Role == SSHRole.Friend) || (FSelf.Owner.Role == SSHRole.Self))))
                     {
                         LHangarApproove = true;
                         if (!SSHShared.MonoSource.Script.IsDrag)
@@ -191,7 +189,7 @@ namespace Planetar
                 }
 
                 LCoreVisible = true;
-                LHangarApproove = (!FSelf.IsTiming) && (FSelf.ControlEnemy == 0);
+                LHangarApproove = (!FSelf.IsTiming) && (!FSelf.IsCoverageEnemy);
                 DoShowFocus(LHangarApproove);
             }
             // Если это корабль
@@ -206,7 +204,7 @@ namespace Planetar
                     // Показ радиуса для текущей планеты
                     ShowRadius(FSelf == LShip.Planet);
                 }
-             //  else
+                //  else
                 //    _FogActive.enabled = false;
             }
             else
@@ -217,7 +215,7 @@ namespace Planetar
 
                 if (FLandingVisible)
                 {
-                    
+
                     ShowRadius(false);
                     ShowLanding(false);
                     FLandingVisible = false;
@@ -258,10 +256,9 @@ namespace Planetar
         // Разрешение входа в элемент-цель
         protected override bool DoEnterTarget()
         {
-
             if (LHangarApproove)
                 return true;
-            
+
             if (SSHShared.MonoSource is Ship)
             {
                 Ship LShip = (Ship)SSHShared.MonoSource;
@@ -271,8 +268,9 @@ namespace Planetar
                     if (LShip.Planet == FSelf)
                         return true;
                     if ((!LShip.Tech(ShipTech.Stationary).Supported) && LShip.Planet.Links.Contains(FSelf))
-                    return true;
-                } else
+                        return true;
+                }
+                else
                     return true;
             }
             return false;
@@ -348,13 +346,6 @@ namespace Planetar
             // Подпишемся если нет подписки и есть видимость
             if (FSelf.Subscription == PlanetSubscription.Disabled)
             {
-                if (!FIsLoaded)
-                {
-                    FIsLoaded = true;
-                    // Создадим слоты
-                    DoSlotsCreate();
-                }
-
                 FSelf.Subscription = PlanetSubscription.Queryed;
                 Engine.SocketWriter.PlanetSubscribe(FSelf);
             }
@@ -375,6 +366,10 @@ namespace Planetar
         // Выполнение механизма поточной обработки компонент планетоида
         private void DoShowingAction(bool AVisible)
         {
+            // Создадим слоты
+            if (FLanding == null)
+                DoSlotsCreate();
+
             if (AVisible)
             {
                 // Скрипт для обработки действий включаем всегда
@@ -395,7 +390,7 @@ namespace Planetar
             if (FSelf.PlanetType == PlanetType.Hole)
                 DoShowSphere(LVisible);
             // Переключим туманы        
-            
+
             // Сменим видимость интерактивных элементов
             _UI.gameObject.SetActive(LVisible);
         }
@@ -592,11 +587,12 @@ namespace Planetar
         // Создание массива слотов
         private void DoSlotsCreate()
         {
+            FLanding = new Landing[C_TotalSlotCount];
             //  Слоты бывают внутренние и внешние, создаем сразу оба типа
-            for (int LIndex = 1; LIndex <= C_TotalSlotCount; LIndex++)
+            for (int LIndex = 0; LIndex < C_TotalSlotCount; LIndex++)
             {
                 Landing LLanding = new Landing(LIndex, _SlotsArray, FSelf, LIndex > C_FightSlotCount);
-                FLanding[LIndex - 1] = LLanding;
+                FLanding[LIndex] = LLanding;
                 // Расположем на орбите
                 if (LLanding.IsLowOrbit)
                     LLanding.Transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
@@ -676,7 +672,7 @@ namespace Planetar
         // Возврат объекта слота планеты по его индексу
         public Landing SlotByIndex(int ASlot)
         {
-            return FLanding[ASlot - 1];
+            return FLanding[ASlot];
         }
 
         // Показ границы перелета
@@ -698,7 +694,7 @@ namespace Planetar
             // Для контроля полностью скрываем вражескую территорию
             if (FSelf.State == PlanetState.Inactive)
             {
-                if ((FSelf.ControlEnemy > 0) || (FSelf.IsTiming))
+                if ((FSelf.IsCoverageEnemy) || (FSelf.IsTiming))
                     _FogPassive.color = Color.black;
                 else
                     _FogPassive.color = Color.gray;
@@ -777,8 +773,6 @@ namespace Planetar
                 else
                     _TimerBackground.color = SSHLocale.IntToColor(0x636363FF);
             }
-            // Обновим миникарту
-            UpdateMinimap(true, false, false);
         }
 
         // Показ или скрытие иконки портала и пути на миникарте

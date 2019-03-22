@@ -72,13 +72,13 @@ namespace Planetar
         // Наличие роли игрока на планете
         public bool VisibleHard;
         // Количество своего контроля
-        public int ControlSelf;
+        public bool IsCoverageSelf;
         // Количество контроля союзника
-        public int ControlFriend;
+        public bool IsCoverageFriends;
         // Количество контроля врага
-        public int ControlEnemy;
+        public bool IsCoverageEnemy { get; set; }
         // Признак подписки на действия
-        public PlanetSubscription Subscription;
+        public PlanetSubscription Subscription { get; set; }
         // Идентификатор планеты, к которой подведен торговый путь 
         public Planet TradePlanet;
         // Признак возможности постройки нестационарных корабликов
@@ -119,7 +119,7 @@ namespace Planetar
         // Привязка к игровому скрипту
         private MonoPlanet FScript;
         // Сфера планеты выключается отдельно
-        private MonoPlanetCustom FSubScript;
+        private MonoPlanetCustom FSubScript;        
 
         // Конструктор сразу определяет тип данных
         public Planet(int AUID, Transform AParent, int APosX, int APosY, PlanetType AType)
@@ -139,9 +139,14 @@ namespace Planetar
             Transform.SetParent(AParent, false);
             FScript = Transform.GetComponent<MonoPlanet>();
             FScript._Sphere = PrefabManager.CreatePlanetSphere(AType);
-            FScript._Sphere.transform.SetParent(Transform, false);
-            FScript.Init(this);
+            FScript._Sphere.transform.SetParent(Transform, false);            
             FSubScript = FScript._Sphere.GetComponent<MonoPlanetCustom>();
+        }
+
+        public void Allocate()
+        {
+            Engine.MapPlanets.Add(this);
+            FScript.Init(this);
         }
 
         // Признак видимой и активной планеты
@@ -235,15 +240,13 @@ namespace Planetar
         // Обновление зоны покрытия
         public void UpdateCoverage(bool AIncrement, SSHRole ARole)
         {
-            // Смена значений только при появлении или удалении покрытия
-            int LCount = AIncrement ? 1 : -1;
             // Для миникарты разный контроль имеет разный цвет
             if (ARole == SSHRole.Enemy)
-                ControlEnemy += LCount;
+                IsCoverageEnemy = AIncrement;
             else if (ARole == SSHRole.Friend)
-                ControlFriend += LCount;
+                IsCoverageFriends = AIncrement;
             else if (ARole == SSHRole.Self)
-                ControlSelf += LCount;
+                IsCoverageSelf = AIncrement;
             FScript.UpdateMinimap(false, true, false);
         }
 

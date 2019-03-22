@@ -17,7 +17,7 @@ namespace Shared
         // Игровой трансфоррм
         public Transform Transform;
 
-        public MonoInteractive Script;
+        public MonoInteractive Script { get; set; }
 
         public MonoUIHintCustom Hint { get { return DoGetHint(); } }
 

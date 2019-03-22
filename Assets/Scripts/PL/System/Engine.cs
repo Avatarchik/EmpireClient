@@ -30,7 +30,7 @@ namespace Planetar
     public class Engine : SSHShared
     {
         // Список всех кораблей системы
-        public static Dictionary<int, Ship> MapShips;
+        public static Dictionary<int, Ship> MapShips { get; set; }
         // Список всех планет системы
         public static List<Planet> MapPlanets;
         // Описание строений

@@ -446,8 +446,10 @@ namespace Planetar
         }
 
         // Отложенная инициализация
-        public void Init()
+        public void Allocate()
         {
+            Planet.Ships.Add(this);
+            Engine.MapShips.Add(UID, this);
             FScript.Init(this);
         }
 

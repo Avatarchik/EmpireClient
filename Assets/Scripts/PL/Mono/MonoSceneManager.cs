@@ -103,7 +103,6 @@ namespace Planetar
             /**/
             Engine.Load();
             Engine.SceneManager = this;
-            // Показ заставки о старте загрузки
             // Подпись на сообщение об ошибке
             SSHConnection.Socket.OnError = OnError;
             // Сообщение серверу о готовности принять данные созвездия

@@ -224,12 +224,12 @@ namespace Planetar
                     State = (PlanetState)FReader.ReadInt32(),
                     VisibleHard = FReader.ReadBoolean(),
                     VisibleSoft = FReader.ReadBoolean(),
-                    ControlSelf = FReader.ReadInt32(),
-                    ControlFriend = FReader.ReadInt32(),
-                    ControlEnemy = FReader.ReadInt32(),
+                    IsCoverageSelf = FReader.ReadBoolean(),
+                    IsCoverageFriends = FReader.ReadBoolean(),
+                    IsCoverageEnemy = FReader.ReadBoolean(),
                     IsBigHole = FReader.ReadBoolean()
                 };
-                Engine.MapPlanets.Add(LPlanet);
+                LPlanet.Allocate();                
             }
             // Загрузка ссылок
             for (int LIndex = 0; LIndex < LCount; LIndex++)
@@ -257,12 +257,9 @@ namespace Planetar
                 Fuel = FReader.ReadInt32(),
                 IsCapture = FReader.ReadBoolean(),
                 IsAutoTarget = FReader.ReadBoolean(),
-                Landing = LSlot,
                 Planet = LPlanet
-            };
-            LShip.Planet.Ships.Add(LShip);
-            LShip.Init();
-            Engine.MapShips.Add(LUID, LShip);
+            };            
+            LShip.Allocate();
         }
 
         private void DoReadShipRemove()
