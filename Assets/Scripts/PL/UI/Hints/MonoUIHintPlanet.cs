@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Planetar
 {
-    public class MonoUIHintPlanet : MonoBehaviour
+    public class MonoUIHintPlanet : Shared.MonoUIHintCustom
     {
         public Text OwnerName;
         public Text OwnerAliance;
@@ -19,6 +19,12 @@ namespace Planetar
 
         private Transform FTransform;
         private Planet FPlanet;
+
+        void Update()
+        {
+            if ((FPlanet != null))
+                Show(FPlanet);
+        }
 
         public void Show(Planet APlanet)
         {
@@ -55,8 +61,10 @@ namespace Planetar
                 LDescription += "\r\n";
                 LDescription += "Верфи: " + APlanet.ShipyardsCount.ToString() + "\r\n";
                 LDescription += "Модули: " + APlanet.ModulesCount.ToString() + "\r\n";
-
-                Description.text = LDescription;
+                LDescription += "Ссылки: ";
+                foreach (Planet tmpPlanet in APlanet.Links)
+                    LDescription += tmpPlanet.UID + ", ";
+                Description.text = "\r\n" + LDescription;
             }
             else
                 OwnerName.text = "Покрыто мраком";
@@ -70,6 +78,15 @@ namespace Planetar
             FTransform.position = APlanet.Transform.position;
             FTransform.localPosition = new Vector3(FTransform.localPosition.x + 30, FTransform.localPosition.y - 30, -50);
 
+        }
+
+        protected override void DoChange(Shared.Interactive AObject)
+        {
+            if (!FTransform)
+                FTransform = transform;
+            FPlanet = (Planet)AObject;
+
+            Show(FPlanet);
         }
 
         public void UpdateActive()

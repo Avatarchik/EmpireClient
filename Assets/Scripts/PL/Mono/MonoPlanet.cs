@@ -323,6 +323,10 @@ namespace Planetar
         // Показ и скрытие слотов
         private void ShowLanding(bool AShow)
         {
+            // Создадим слоты
+            if (FLanding == null)
+                DoSlotsCreate();
+
             foreach (Landing LSlot in FLanding)
                 LSlot.Show(AShow, FIsShowInnerSlots);
         }
@@ -392,7 +396,7 @@ namespace Planetar
             // Переключим туманы        
 
             // Сменим видимость интерактивных элементов
-            _UI.gameObject.SetActive(LVisible);
+            _UI.gameObject.SetActive(true/*LVisible*/);
         }
 
         private void DoShowSphere(bool AValue)
@@ -631,19 +635,20 @@ namespace Planetar
         // Обновление надписи владельца планеты
         private void DoUpdateName()
         {
+            FSelf.Name = FSelf.UID.ToString();
             // Для пустого имени убираем меш
-            if (FSelf.Name.Length == 0)
-            {
-                if (_OwnerName.gameObject.activeSelf)
-                    _OwnerName.gameObject.SetActive(false);
-            }
-            else
+           // if (FSelf.Name.Length == 0)
+          //  {
+          //      if (_OwnerName.gameObject.activeSelf)
+          //          _OwnerName.gameObject.SetActive(false);
+          //  }
+           // else
             {
                 // Смену имени проводим если планета называется по ругму или кем-то захвачена
-                if ((FSelf.PlanetType == PlanetType.Big) || (FSelf.PlanetType == PlanetType.Small))
+              //  if ((FSelf.PlanetType == PlanetType.Big) || (FSelf.PlanetType == PlanetType.Small))
                     _OwnerName.text = FSelf.Class.ToString() + "\r\n<color=\"#" + ColorUtility.ToHtmlStringRGB(_OwnerLevel.color) + "\">" + FSelf.Name + "</color>";
-                else
-                    _OwnerName.text = FSelf.Name;
+               // else
+               //     _OwnerName.text = FSelf.Name;
                 _OwnerName.gameObject.SetActive(true);
             }
         }

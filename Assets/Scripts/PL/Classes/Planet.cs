@@ -115,11 +115,20 @@ namespace Planetar
         public bool IsManned;
         // Признак тайминговой планеты
         public bool IsTiming;
+        // Общий компонент хинта
+        private static MonoUIHintPlanet FHint;
 
         // Привязка к игровому скрипту
         private MonoPlanet FScript;
         // Сфера планеты выключается отдельно
-        private MonoPlanetCustom FSubScript;        
+        private MonoPlanetCustom FSubScript;
+
+        protected override Shared.MonoUIHintCustom DoGetHint()
+        {
+            if (!FHint)
+                FHint = PrefabManager.CreatePlanetHint();
+            return FHint;
+        }
 
         // Конструктор сразу определяет тип данных
         public Planet(int AUID, Transform AParent, int APosX, int APosY, PlanetType AType)
@@ -207,7 +216,7 @@ namespace Planetar
             else
                 Subscription = PlanetSubscription.Disabled;
             // Отправим уведомление о подписке
-            SetActive(true);
+            SetActive(ASubscribed);
         }
 
         // Обновление владельца планеты
