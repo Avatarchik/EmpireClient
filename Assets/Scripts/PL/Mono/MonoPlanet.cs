@@ -148,6 +148,7 @@ namespace Planetar
 
         protected override void DoOnBecameVisible()
         {
+
             FSelf.SetActive(true);
         }
 
@@ -323,10 +324,10 @@ namespace Planetar
         // Показ и скрытие слотов
         private void ShowLanding(bool AShow)
         {
+
             // Создадим слоты
             if (FLanding == null)
                 DoSlotsCreate();
-
             foreach (Landing LSlot in FLanding)
                 LSlot.Show(AShow, FIsShowInnerSlots);
         }
@@ -677,6 +678,10 @@ namespace Planetar
         // Возврат объекта слота планеты по его индексу
         public Landing SlotByIndex(int ASlot)
         {
+            // Создадим слоты
+            if (FLanding == null)
+                DoSlotsCreate();
+
             return FLanding[ASlot];
         }
 

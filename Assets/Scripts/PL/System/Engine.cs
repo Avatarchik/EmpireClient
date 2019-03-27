@@ -29,8 +29,6 @@ namespace Planetar
 
     public class Engine : SSHShared
     {
-        // Список всех кораблей системы
-        public static Dictionary<int, Ship> MapShips { get; set; }
         // Список всех планет системы
         public static List<Planet> MapPlanets;
         // Описание строений
@@ -56,10 +54,6 @@ namespace Planetar
         // UI объект родителя координатной сетки
         public static Transform UIPanelGrid;
 
-        // Кэш последней обработанной планеты
-        private static Planet FLastPlanet = null;
-        private static int FLastPlanetID = -1;
-
         // Технологии корабликов
         private static TechInfo[,] FTechShips;
         // Технологии строений
@@ -69,7 +63,6 @@ namespace Planetar
         // Загрузка объектов сцены
         public static void Load()
         {
-            MapShips = new Dictionary<int, Ship>();
             MapPlanets = new List<Planet>();
             FTechShips = new TechInfo[Enum.GetValues(typeof(ShipType)).Length, Enum.GetValues(typeof(ShipTech)).Length];
             FTechBuildings = new TechInfo[Enum.GetValues(typeof(BuildingType)).Length, Enum.GetValues(typeof(BuildingTech)).Length];
@@ -79,7 +72,6 @@ namespace Planetar
             SocketReader = new SocketReader();
             SocketWriter = new SocketWriter();
             MapPlanets.Clear();
-            MapShips.Clear();
         }
 
         public static TechInfo TechShip(ShipType AShipType, ShipTech ATechType)
@@ -100,30 +92,6 @@ namespace Planetar
         public static void TechBuilding(BuildingType ABuildingType, BuildingTech ATechType, TechInfo ATech)
         {
             FTechBuildings[(int)ABuildingType, (int)ATechType] = ATech;
-        }
-
-        // Получение объекта планеты по порядковому идентификатору
-        public static Planet PlanetByUID(int AUID)
-        {
-            if (FLastPlanetID == AUID)
-                return FLastPlanet;
-            else if (AUID == -1)
-                return null;
-            else
-            {
-                FLastPlanetID = AUID;
-                FLastPlanet = MapPlanets[AUID];
-                return FLastPlanet;
-            }
-        }
-
-        // Получение объекта корабля по уникальному идентификатору
-        public static Ship ShipByUID(int AUID)
-        {
-            if (AUID == -1)
-                return null;
-            else
-                return MapShips[AUID];
         }
     }
 }

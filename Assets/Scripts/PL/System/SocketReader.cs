@@ -202,6 +202,24 @@ namespace Planetar
                 base.DoRead(ACommand, AReader);
         }
 
+        // Получение объекта планеты по порядковому идентификатору
+        private Planet PlanetByUID(int aUID)
+        {
+            if (aUID == -1)
+                return null;
+            else
+                return Engine.MapPlanets[aUID];
+        }
+
+        private Landing LandingByUID(int aUID)
+        {
+            Planet tmpPlanet = PlanetByUID(aUID >> 16);
+            if (tmpPlanet != null)
+                return tmpPlanet.SlotByIndex(aUID & 0xFFFF);
+            else
+                return null;
+        }
+
         private void DoReadPlanetarLoadPlanets()
         {
             int LCount = FReader.ReadInt32();
@@ -242,82 +260,79 @@ namespace Planetar
 
         private void DoReadShipCreate()
         {
-            int LUID = FReader.ReadInt32();
+            int tmpUID = FReader.ReadInt32();
             Player LOwner = SSHShared.FindPlayer(FReader.ReadInt32());
-            Planet LPlanet = Engine.PlanetByUID(FReader.ReadInt32());
-            Landing LSlot = LPlanet.SlotByIndex(FReader.ReadInt32());
             ShipType LShipType = (ShipType)FReader.ReadInt32();
-            Ship LShip = new Ship(LOwner, LUID, LSlot, LShipType)
+            Ship LShip = new Ship(tmpUID, LOwner, LandingByUID(tmpUID), LShipType)
             {
                 State = (ShipState)FReader.ReadInt32(),
                 Mode = (ShipMode)FReader.ReadInt32(),
-                AttachedPlanet = Engine.PlanetByUID(FReader.ReadInt32()),
+                AttachedPlanet = PlanetByUID(FReader.ReadInt32()),
                 Count = FReader.ReadInt32(),
                 HP = FReader.ReadInt32(),
                 Fuel = FReader.ReadInt32(),
                 IsCapture = FReader.ReadBoolean(),
                 IsAutoTarget = FReader.ReadBoolean(),
-                Planet = LPlanet
             };            
             LShip.Allocate();
         }
 
         private void DoReadShipRemove()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             bool LDestroy = FReader.ReadBoolean();
 
-            Engine.ShipByUID(LShipID).Delete(LDestroy);
+            LandingByUID(LUID).Ship.Delete(LDestroy);
         }
 
         private void DoReadShipUpdateHP()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             int LCount = FReader.ReadInt32();
             int LHP = FReader.ReadInt32();
             int LDestructed = FReader.ReadInt32();
 
-            Ship LShip = Engine.ShipByUID(LShipID);
+            Ship LShip = LandingByUID(LUID).Ship;
             LShip.UpdateHP(LCount, LHP, LDestructed);
         }
 
         private void DoReadShipMoveTo()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             int LTargetPlanet = FReader.ReadInt32();
             int LTargetSlot = FReader.ReadInt32();
 
-            Ship LShip = Engine.ShipByUID(LShipID);
-            Planet LPlanet = Engine.PlanetByUID(LTargetPlanet);
+            Ship LShip = LandingByUID(LUID).Ship;
+            Planet LPlanet = PlanetByUID(LTargetPlanet);
 
             LShip.MoveTo(LPlanet, LTargetSlot);
         }
 
         private void DoReadShipJumpTo()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             int LTargetPlanet = FReader.ReadInt32();
             int LTargetSlot = FReader.ReadInt32();
 
-            Ship LShip = Engine.ShipByUID(LShipID);
-            Planet LPlanet = Engine.PlanetByUID(LTargetPlanet);
+            Ship LShip = LandingByUID(LUID).Ship;
+            Planet LPlanet = PlanetByUID(LTargetPlanet);
 
             LShip.JumpTo(LPlanet, LTargetSlot);
         }
 
         private void DoReadShipRetarget()
         {
-            Ship LShip = Engine.ShipByUID(FReader.ReadInt32());
+            Ship LShip = LandingByUID(FReader.ReadInt32()).Ship;
             ShipWeaponType LWeaponeType = (ShipWeaponType)FReader.ReadInt32();
-            Ship LShipTarget = Engine.ShipByUID(FReader.ReadInt32());
+            Ship LShipTarget = LandingByUID(FReader.ReadInt32()).Ship;
 
             LShip.Weapon(LWeaponeType).Retarget(LShipTarget);
         }
 
         private void DoReadShipAttach()
         {
-            Ship LShip = Engine.ShipByUID(FReader.ReadInt32());
-            Planet LPlanet = Engine.PlanetByUID(FReader.ReadInt32());
+            Ship LShip = LandingByUID(FReader.ReadInt32()).Ship;
+            Planet LPlanet = PlanetByUID(FReader.ReadInt32());
             bool LCapture = FReader.ReadBoolean();
             bool LAutoTarget = FReader.ReadBoolean();
 
@@ -326,7 +341,7 @@ namespace Planetar
 
         private void DoReadShipFlight()
         {
-            Ship LShip = Engine.ShipByUID(FReader.ReadInt32());
+            Ship LShip = LandingByUID(FReader.ReadInt32()).Ship;
             int LState = FReader.ReadInt32();
             int LMode = FReader.ReadInt32();
             bool LCapture = FReader.ReadBoolean();
@@ -336,19 +351,19 @@ namespace Planetar
 
         private void DoReadShipTimerUpdate()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             int LTimer = FReader.ReadInt32();
             int LSeconds = FReader.ReadInt32();
 
-            Engine.ShipByUID(LShipID).UpdateTimer(LTimer, LSeconds);
+            LandingByUID(LUID).Ship.UpdateTimer(LTimer, LSeconds);
         }
 
         private void DoReadShipRefill()
         {
-            int LShipID = FReader.ReadInt32();
+            int LUID = FReader.ReadInt32();
             int LFuel = FReader.ReadInt32();
 
-            Engine.ShipByUID(LShipID).UpdateFuel(LFuel);
+            LandingByUID(LUID).Ship.UpdateFuel(LFuel);
         }
 
         private void DoReadPlanetOwnerChanged()
@@ -356,7 +371,7 @@ namespace Planetar
             int LPlanetUID = FReader.ReadInt32();
             int LOwner = FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPlanetUID).UpdateOwner(LOwner);
+            PlanetByUID(LPlanetUID).UpdateOwner(LOwner);
         }
 
         private void DoReadPlanetStateUpdate()
@@ -365,7 +380,7 @@ namespace Planetar
             PlanetState LPlanetState = (PlanetState)FReader.ReadInt32();
             bool LIsBigHole = FReader.ReadBoolean();
 
-            Engine.PlanetByUID(LPlanet).UpdateState(LPlanetState, LIsBigHole);
+            PlanetByUID(LPlanet).UpdateState(LPlanetState, LIsBigHole);
         }
 
         private void DoReadPlanetStateTime()
@@ -373,7 +388,7 @@ namespace Planetar
             int LPlanet = FReader.ReadInt32();
             int LTime = FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPlanet).UpdateTimer(LTime);
+            PlanetByUID(LPlanet).UpdateTimer(LTime);
         }
 
         private void DoReadPlanetVisibilityUpdate()
@@ -382,7 +397,7 @@ namespace Planetar
             bool LHardLight = FReader.ReadBoolean();
             bool LIncrement = FReader.ReadBoolean();
 
-            Engine.PlanetByUID(LPlanet).UpdateVisibility(LHardLight, LIncrement);
+            PlanetByUID(LPlanet).UpdateVisibility(LHardLight, LIncrement);
         }
 
         private void DoReadPlanetCoverageUpdate()
@@ -391,7 +406,7 @@ namespace Planetar
             bool LIncrement = FReader.ReadBoolean();
             SSHRole LRole = (SSHRole)FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPlanet).UpdateCoverage(LIncrement, LRole);
+            PlanetByUID(LPlanet).UpdateCoverage(LIncrement, LRole);
         }
 
         private void DoReadPlanetSubscriptionChanged()
@@ -399,7 +414,7 @@ namespace Planetar
             int LPLanet = FReader.ReadInt32();
             bool LSubscribed = FReader.ReadBoolean();
 
-            Engine.PlanetByUID(LPLanet).UpdateSubscription(LSubscribed);
+            PlanetByUID(LPLanet).UpdateSubscription(LSubscribed);
         }
 
         private void DoReadPlanetDetailsShow()
@@ -421,9 +436,9 @@ namespace Planetar
         private void DoReadPlanetTradePathUpdate()
         {
             int LPLanet = FReader.ReadInt32();
-            Planet LTarget = Engine.PlanetByUID(FReader.ReadInt32());
+            Planet LTarget = PlanetByUID(FReader.ReadInt32());
 
-            Engine.PlanetByUID(LPLanet).UpdateTradePath(LTarget);
+            PlanetByUID(LPLanet).UpdateTradePath(LTarget);
         }
 
         private void DoReadPlanetElectroUpdate()
@@ -431,7 +446,7 @@ namespace Planetar
             int LPLanet = FReader.ReadInt32();
             int LEnergy = FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPLanet).UpdateEnergy(LEnergy);
+            PlanetByUID(LPLanet).UpdateEnergy(LEnergy);
         }
         private void DoReadPlanetCaptureUpdate()
         {
@@ -439,7 +454,7 @@ namespace Planetar
             int LCaptureValue = FReader.ReadInt32();
             SSHRole LCaptureRole = (SSHRole)FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPLanet).UpdateCapture(LCaptureValue, LCaptureRole);
+            PlanetByUID(LPLanet).UpdateCapture(LCaptureValue, LCaptureRole);
         }
 
         private void DoReadPlanetBattleUpdate()
@@ -447,7 +462,7 @@ namespace Planetar
             int LPLanet = FReader.ReadInt32();
             bool LInBattle = FReader.ReadBoolean();
 
-            Engine.PlanetByUID(LPLanet).UpdateBattle(LInBattle);
+            PlanetByUID(LPLanet).UpdateBattle(LInBattle);
         }
 
         private void DoReadPlanetModulesUpdate()
@@ -455,13 +470,13 @@ namespace Planetar
             int LPLanet = FReader.ReadInt32();
             int LCount = FReader.ReadInt32();
 
-            Engine.PlanetByUID(LPLanet).UpdateModulesCount(LCount);
+            PlanetByUID(LPLanet).UpdateModulesCount(LCount);
         }
 
         private void DoReadPortalOpen()
         {
-            Planet LSource = Engine.PlanetByUID(FReader.ReadInt32());
-            Planet LTarget = Engine.PlanetByUID(FReader.ReadInt32());
+            Planet LSource = PlanetByUID(FReader.ReadInt32());
+            Planet LTarget = PlanetByUID(FReader.ReadInt32());
             bool LBreakable = FReader.ReadBoolean();
             int LLimit = FReader.ReadInt32();
             SSHRole LRole = SSHRole.Neutral;
@@ -474,7 +489,7 @@ namespace Planetar
 
         private void DoReadPortalUpdate()
         {
-            Planet LSource = Engine.PlanetByUID(FReader.ReadInt32());
+            Planet LSource = PlanetByUID(FReader.ReadInt32());
             int LLimit = FReader.ReadInt32();
             // Обновим портал
             LSource.PortalUpdate(LLimit);
@@ -482,14 +497,14 @@ namespace Planetar
 
         private void DoReadPortalClose()
         {
-            Planet LSource = Engine.PlanetByUID(FReader.ReadInt32());
+            Planet LSource = PlanetByUID(FReader.ReadInt32());
             // Закроем портал
             LSource.PortalClose();
         }
 
         private void DoReadLowGravityUpdate()
         {
-            Planet LSource = Engine.PlanetByUID(FReader.ReadInt32());
+            Planet LSource = PlanetByUID(FReader.ReadInt32());
             bool LEnabled = FReader.ReadBoolean();
             // Включим или выключим гравитационный потенциал
             LSource.LowGravity(LEnabled);
@@ -508,7 +523,7 @@ namespace Planetar
             int LSize = FReader.ReadInt32();
             bool LClear = FReader.ReadBoolean();
 
-            Engine.PlanetByUID(LPLanet).UpdateStorageSize(LSize, LClear);
+            PlanetByUID(LPLanet).UpdateStorageSize(LSize, LClear);
         }
 
         private void DoReadPlanetStorageUpdate()

@@ -432,12 +432,13 @@ namespace Planetar
         }
 
         // Конструктор сразу определяет тип данных
-        public Ship(Player AOwner, int AUID, Landing ALanding, ShipType AShipType)
+        public Ship(int AID, Player AOwner, Landing ALanding, ShipType AShipType)
         {
-            UID = AUID;
+            UID = AID;
             Owner = AOwner;
             ShipType = AShipType;
             Landing = ALanding;
+            Planet = ALanding.Planet;
             FTimers = new int[Enum.GetValues(typeof(ShipTimer)).Length];
             Weapons = new ShipWeapon[Enum.GetValues(typeof(ShipWeaponType)).Length];
             Transform = PrefabManager.CreateShip(ALanding.Transform, Owner.Race, AShipType).transform;
@@ -449,7 +450,6 @@ namespace Planetar
         public void Allocate()
         {
             Planet.Ships.Add(this);
-            Engine.MapShips.Add(UID, this);
             FScript.Init(this);
         }
 
@@ -504,6 +504,7 @@ namespace Planetar
         // Команда физического перемещения кораблика
         public void MoveTo(Planet APlanet, int ASlot)
         {
+            UID = APlanet.UID << 16 | ASlot;
             FScript.MoveToPlanet(APlanet, ASlot);
         }
 
@@ -521,7 +522,6 @@ namespace Planetar
         public void Delete(bool AExplosion)
         {
             Hint.Hide();
-            Engine.MapShips.Remove(UID);
             FScript.Delete(AExplosion);
         }
 

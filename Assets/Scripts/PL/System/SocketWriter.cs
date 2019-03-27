@@ -9,7 +9,6 @@
 {                                              }
 /*///////////////////////////////////////////////
 using System.IO;
-using System.Collections.Generic;
 
 namespace Planetar
 {
@@ -51,7 +50,7 @@ namespace Planetar
         // Разделение стеков стеков
         private const int C_SHIP_SEPARATE = 0x1010;
         // Сцена готова принять данные
-    /*    private const int CmdPlanetarReadyToLoad = 0x1011;*/
+        /*    private const int CmdPlanetarReadyToLoad = 0x1011;*/
         // Создать портал между двумя объектами
         private const int C_SHIP_PORTAL_OPEN = 0x1012;
         // Уничтожить стек
@@ -78,7 +77,6 @@ namespace Planetar
         public void ShipMerge(Ship ASource, Ship ATarget, int ACount)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_MERGE);
-            LWriter.Write(ASource.Planet.UID);
             LWriter.Write(ASource.UID);
             LWriter.Write(ATarget.UID);
             LWriter.Write(ACount);
@@ -88,7 +86,6 @@ namespace Planetar
         public void ShipSeparate(Ship ASource, int ATarget, int ACount)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_SEPARATE);
-            LWriter.Write(ASource.Planet.UID);
             LWriter.Write(ASource.UID);
             LWriter.Write(ATarget);
             LWriter.Write(ACount);
@@ -98,7 +95,6 @@ namespace Planetar
         public void ShipMoveTo(Ship AShip, Planet ATarget, int ATargetSlot)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_MOVE_TO);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             LWriter.Write(ATarget.UID);
             LWriter.Write(ATargetSlot);
@@ -108,7 +104,6 @@ namespace Planetar
         public void ShipAttachTo(Ship AShip, int AUID)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_ATTACH_TO);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             LWriter.Write(AUID);
             DoClose(LWriter);
@@ -127,7 +122,6 @@ namespace Planetar
         public void ShipToHangar(int AHangarSlot, Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_TO_HANGAR);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             LWriter.Write(AHangarSlot);
             DoClose(LWriter);
@@ -136,7 +130,6 @@ namespace Planetar
         public void ShipHypodispersion(Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_HYPODISPERSION);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             DoClose(LWriter);
         }
@@ -149,10 +142,7 @@ namespace Planetar
             foreach (Planet LPLanet in AGroup.Planets)
                 LWriter.Write(LPLanet.UID);
             foreach (Ship LShip in AGroup.Ships)
-            {
-                LWriter.Write(LShip.Planet.UID);
                 LWriter.Write(LShip.UID);
-            }
             DoClose(LWriter);
         }
 
@@ -167,7 +157,6 @@ namespace Planetar
         public void ShipSkillConstructor(Ship ASource, Ship ATarget)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_CONSTRUCTOR);
-            LWriter.Write(ASource.Planet.UID);
             LWriter.Write(ASource.UID);
             LWriter.Write(ATarget.UID);
             DoClose(LWriter);
@@ -244,7 +233,6 @@ namespace Planetar
         public void ShipChangeActive(Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_CHANGE_ACTIVE);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             DoClose(LWriter);
         }
@@ -252,7 +240,6 @@ namespace Planetar
         public void ShipPortalOpen(PortalShip APortal, Planet ADestination)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_PORTAL_OPEN);
-            LWriter.Write(APortal.Initiator.Planet.UID);
             LWriter.Write(APortal.Initiator.UID);
             LWriter.Write(ADestination.UID);
             DoClose(LWriter);
@@ -268,7 +255,6 @@ namespace Planetar
         public void ShipPortalJump(Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_PORTAL_JUMP);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             DoClose(LWriter);
         }
@@ -276,7 +262,6 @@ namespace Planetar
         public void ShipDelete(Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_DELETE);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             DoClose(LWriter);
         }
@@ -284,7 +269,6 @@ namespace Planetar
         public void ShipAnnihilation(Ship AShip)
         {
             BinaryWriter LWriter = DoOpen(C_SHIP_ANNIHILATION);
-            LWriter.Write(AShip.Planet.UID);
             LWriter.Write(AShip.UID);
             DoClose(LWriter);
         }
