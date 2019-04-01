@@ -261,9 +261,12 @@ namespace Planetar
         private void DoReadShipCreate()
         {
             int tmpUID = FReader.ReadInt32();
+            Landing tmpLanding = LandingByUID(tmpUID);
+            if (tmpLanding.Ship != null)
+                return;
             Player LOwner = SSHShared.FindPlayer(FReader.ReadInt32());
             ShipType LShipType = (ShipType)FReader.ReadInt32();
-            Ship LShip = new Ship(tmpUID, LOwner, LandingByUID(tmpUID), LShipType)
+            Ship LShip = new Ship(tmpUID, LOwner, tmpLanding, LShipType)
             {
                 State = (ShipState)FReader.ReadInt32(),
                 Mode = (ShipMode)FReader.ReadInt32(),
