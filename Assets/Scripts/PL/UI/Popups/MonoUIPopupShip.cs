@@ -11,24 +11,25 @@ namespace Planetar
 
         private Dictionary<ShipAction, MonoUIPopupShipItem> FItems;
 
-        private void ItemCreate(ShipAction AShipAction)
+        private void ItemAdd(ShipAction AShipAction)
         {
-            /*FItems[(int)AShipAction] = PrefabManager.CreateShipPopupItem(FTransform);
-            FItems[(int)AShipAction].Init(AShipAction.ToString(), () => { FShip.ActionCall(AShipAction); });*/
+            MonoUIPopupShipItem tmpItem = new MonoUIPopupShipItem();
+            tmpItem = PrefabManager.CreateShipPopupItem(FTransform);
+            tmpItem.Init(AShipAction.ToString(), () => { FShip.ActionCall(AShipAction); });
+            FItems.Add(AShipAction, tmpItem);
         }
 
         private void Start()
         {
             FTransform = transform;
-            /*FItems = new MonoUIPopupShipItem[10];*/
-
-            ItemCreate(ShipAction.ChangeMode);
-            ItemCreate(ShipAction.PortalJump);
-            ItemCreate(ShipAction.PortalOpen);
-            ItemCreate(ShipAction.MoveToHangar);
-            ItemCreate(ShipAction.Annihilation);
-            ItemCreate(ShipAction.Constructor);
-            ItemCreate(ShipAction.Delete);
+            FItems = new Dictionary<ShipAction, MonoUIPopupShipItem>();
+            ItemAdd(ShipAction.ChangeMode);
+            ItemAdd(ShipAction.PortalJump);
+            ItemAdd(ShipAction.PortalOpen);
+            ItemAdd(ShipAction.MoveToHangar);
+            ItemAdd(ShipAction.Annihilation);
+            ItemAdd(ShipAction.Constructor);
+            ItemAdd(ShipAction.Delete);
         }
 
         // Обновление параметров меню

@@ -9,17 +9,20 @@ namespace Planetar
         public Text Caption;
 
         private UnityAction FCallback;
-        private string FCaption;
+
+        private void OnMouseDown()
+        {
+            FCallback();
+        }
 
         public void Init(string ACaption, UnityAction ACallback)
         {
             FCallback = ACallback;
-            FCaption = ACaption;
+            Caption.text = ACaption;
         }
 
         public void Change(string ACaption)
         {
-            FCaption = ACaption;
             Caption.text = ACaption;
         }
     }
