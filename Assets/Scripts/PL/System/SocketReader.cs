@@ -108,7 +108,7 @@ namespace Planetar
         // Чтение буфера комманд
         protected override void DoRead(int ACommand, MemoryStream AReader)
         {
-            Debug.Log("Command: 0x" + ACommand.ToString("X"));
+       /*     Debug.Log("Command: 0x" + ACommand.ToString("X"));*/
             // Пока такое решение, перебор
             if (ACommand == C_SHIP_UPDATE_HP)
                 DoReadShipUpdateHP();
@@ -247,7 +247,7 @@ namespace Planetar
                     IsCoverageEnemy = FReader.ReadBoolean(),
                     IsBigHole = FReader.ReadBoolean()
                 };
-                LPlanet.Allocate();                
+                LPlanet.Allocate();
             }
             // Загрузка ссылок
             for (int LIndex = 0; LIndex < LCount; LIndex++)
@@ -276,7 +276,7 @@ namespace Planetar
                 Fuel = FReader.ReadInt32(),
                 IsCapture = FReader.ReadBoolean(),
                 IsAutoTarget = FReader.ReadBoolean(),
-            };            
+            };
             LShip.Allocate();
         }
 
@@ -327,9 +327,9 @@ namespace Planetar
         {
             Ship LShip = LandingByUID(FReader.ReadInt32()).Ship;
             ShipWeaponType LWeaponeType = (ShipWeaponType)FReader.ReadInt32();
-            Ship LShipTarget = LandingByUID(FReader.ReadInt32()).Ship;
+            Landing LLanding = LandingByUID(FReader.ReadInt32());
 
-            LShip.Weapon(LWeaponeType).Retarget(LShipTarget);
+            LShip.Weapon(LWeaponeType).Retarget(LLanding != null ? LLanding.Ship : null);
         }
 
         private void DoReadShipAttach()

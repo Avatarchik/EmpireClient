@@ -76,7 +76,7 @@ namespace Planetar
         // Расстояние до торгового слотв
         private const float C_TradeSlotRange = 0.7f;
         // Количество боевых слотов
-        private const int C_FightSlotCount = 14;
+        private const int C_FightSlotCount = 15;
         // Количество слотов с экономическими
         private const int C_TotalSlotCount = C_FightSlotCount + 5;
         // Скорость вращения слотов
