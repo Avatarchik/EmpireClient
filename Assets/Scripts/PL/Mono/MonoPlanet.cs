@@ -722,7 +722,7 @@ namespace Planetar
         public void UpdateCapture(int AValue, SSHRole ARole)
         {
             // Закрасим кружок
-            _OwnerCapture.fillAmount = AValue / 100f;
+            _OwnerCapture.fillAmount = AValue / 100000f;
             // Под цвет владельца
             if (ARole == SSHRole.Self)
                 _OwnerCapture.color = SSHLocale.IntToColor(0x00CAFF79);

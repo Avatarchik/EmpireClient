@@ -25,7 +25,7 @@ namespace Planetar
         // Привязка к игровому скрипту
         private MonoLanding FScript;
         // Объект слота
-        private Ship FShip;
+        private Ship FShip { get; set; }
 
         // Установка объекта
         private void SetShip(Ship AShip)

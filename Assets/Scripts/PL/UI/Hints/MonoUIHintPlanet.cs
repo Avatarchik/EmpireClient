@@ -42,6 +42,7 @@ namespace Planetar
                 string LDescription = "Номер в реестре: " + APlanet.UID.ToString() + "\r\n";
 
                 LDescription += "В бою: " + APlanet.InBattle.ToString() + "\r\n";
+                LDescription += "Захват: " + APlanet.CaptureValue.ToString() + "\r\n";
                 LDescription += "\r\n";
                 if (APlanet.VisibleHard)
                     LDescription += "Видимость: полная \r\n";

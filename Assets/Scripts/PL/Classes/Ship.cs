@@ -559,11 +559,11 @@ namespace Planetar
         }
 
         // Обновление состояния кораблика
-        public void UpdateState(ShipState AState, ShipMode AMode, bool ACapture)
+        public void UpdateState(ShipState AState, ShipMode AMode)
         {
             State = AState;
             Mode = AMode;
-            IsCapture = ACapture;
+        /*    IsCapture = ACapture;*/
             FScript.UpdateState();
         }
 

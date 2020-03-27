@@ -22,11 +22,11 @@ Material:
     - _Background:
         m_Texture: {fileID: 2800000, guid: 2b9e659974ce28048b9dbb1f78edb82b, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.021446701, y: -0.03562245}
+        m_Offset: {x: 0.008587323, y: -0.008829706}
     - _BigStars:
         m_Texture: {fileID: 2800000, guid: 14cbbc28871aa1641b6024904e65eb47, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 0.12868021, y: -0.2137347}
+        m_Offset: {x: 0.05152394, y: -0.05297824}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -34,11 +34,11 @@ Material:
     - _MediumStars:
         m_Texture: {fileID: 2800000, guid: 71c51eec81d61194ca2452b3cd6610db, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 0.06434011, y: -0.10686735}
+        m_Offset: {x: 0.02576197, y: -0.02648912}
     - _SmallStars:
         m_Texture: {fileID: 2800000, guid: 4f3946552a8b41846abaca31c761d687, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 0.042893402, y: -0.0712449}
+        m_Offset: {x: 0.017174646, y: -0.017659413}
     m_Floats: []
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

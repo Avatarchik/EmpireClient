@@ -45,6 +45,8 @@ namespace Planetar
         // Команда обновления данных хранилища планеты
         private const int C_PLANET_STORAGE_UPDATE = 0x100F;
         // Команда очистки слота хранилища планеты
+        private const int C_HANGAR_BUY = 0x1010;
+        // Команда очистки слота хранилища планеты
         private const int C_PLANET_STORAGE_CLEAR = 0x1011;
         // Команда обновления данных хранилища игрока
         private const int C_PLAYER_STORAGE_UPDATE = 0x1012;
@@ -95,20 +97,20 @@ namespace Planetar
         // Комманда обновления размера хранилища
         private const int C_SHIP_TIMER_UPDATE = 0x1029;
         // Команда обновления портала
-        private const int C_PLANET_PORTAL_UPDATE = 0x1030;
+        private const int C_PLANET_PORTAL_UPDATE = 0x102A;
         // Команда обновления гравитационного потенциала
-        private const int C_PLANET_LOWGRAVITY_UPDATE = 0x1031;
+        private const int C_PLANET_LOWGRAVITY_UPDATE = 0x102B;
         // Команда моментального прыжка на планету
-        private const int C_SHIP_JUMP_TO = 0x1032;
+        private const int C_SHIP_JUMP_TO = 0x102C;
         // Команда обновления количества топлива
-        private const int C_SHIP_REFILL = 0x1033;
+        private const int C_SHIP_REFILL = 0x102D;
 
-        private const int C_PLANETAR_LOAD_PLANETS = 0x1034;
+        private const int C_PLANETAR_LOAD_PLANETS = 0x102E;
 
         // Чтение буфера комманд
         protected override void DoRead(int ACommand, MemoryStream AReader)
         {
-       /*     Debug.Log("Command: 0x" + ACommand.ToString("X"));*/
+            /*     Debug.Log("Command: 0x" + ACommand.ToString("X"));*/
             // Пока такое решение, перебор
             if (ACommand == C_SHIP_UPDATE_HP)
                 DoReadShipUpdateHP();
@@ -198,6 +200,8 @@ namespace Planetar
                 DoReadInfoWarships();
             else if (ACommand == C_PLANETAR_LOAD_PLANETS)
                 DoReadPlanetarLoadPlanets();
+            else if (ACommand == C_HANGAR_BUY)
+                DoReadHangarBuy();
             else
                 base.DoRead(ACommand, AReader);
         }
@@ -262,6 +266,7 @@ namespace Planetar
         {
             int tmpUID = FReader.ReadInt32();
             Landing tmpLanding = LandingByUID(tmpUID);
+            /* пересмотреть логику */
             if (tmpLanding.Ship != null)
                 return;
             Player LOwner = SSHShared.FindPlayer(FReader.ReadInt32());
@@ -347,9 +352,8 @@ namespace Planetar
             Ship LShip = LandingByUID(FReader.ReadInt32()).Ship;
             int LState = FReader.ReadInt32();
             int LMode = FReader.ReadInt32();
-            bool LCapture = FReader.ReadBoolean();
 
-            LShip.UpdateState((ShipState)LState, (ShipMode)LMode, LCapture);
+            LShip.UpdateState((ShipState)LState, (ShipMode)LMode);
         }
 
         private void DoReadShipTimerUpdate()
@@ -724,6 +728,12 @@ namespace Planetar
         }
 
         private void DoReadInfoWarships()
+        {
+            /**/
+        }
+
+
+        private void DoReadHangarBuy()
         {
             /**/
         }
