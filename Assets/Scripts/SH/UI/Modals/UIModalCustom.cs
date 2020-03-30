@@ -24,7 +24,7 @@ namespace Shared
             // Отмена изменений
             if (Input.GetKeyUp(KeyCode.Escape))
                 Close();
-         }
+        }
 
         // Применение изменений для конкретного класса
         protected abstract void DoApply();
