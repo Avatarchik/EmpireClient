@@ -613,9 +613,9 @@ namespace Planetar
                         LTechInfo.Name = LTech.ToString();
                         LTechInfo.Level = FReader.ReadInt32();
                         LTechInfo.Count = FReader.ReadInt32();
-                        LTechInfo.Levels = new int[6];
+                        LTechInfo.Levels = new int[LTechInfo.Count + 1];
                         // Перебор уровней технлогий
-                        for (int LIndex = 0; LIndex < LTechInfo.Count; LIndex++)
+                        for (int LIndex = 0; LIndex <= LTechInfo.Count; LIndex++)
                             LTechInfo.Levels[LIndex] = FReader.ReadInt32();
                         // Установим текущее значение техи
                         LTechInfo.Value = LTechInfo.Levels[LTechInfo.Level];
