@@ -76,7 +76,7 @@ namespace Planetar
         // Расстояние до торгового слотв
         private const float C_TradeSlotRange = 0.7f;
         // Количество боевых слотов
-        private const int C_FightSlotCount = 15;
+        private const int C_FightSlotCount = 14;
         // Количество слотов с экономическими
         private const int C_TotalSlotCount = C_FightSlotCount + 5;
         // Скорость вращения слотов
@@ -592,9 +592,9 @@ namespace Planetar
         // Создание массива слотов
         private void DoSlotsCreate()
         {
-            FLanding = new Landing[C_TotalSlotCount];
+            FLanding = new Landing[C_TotalSlotCount + 1];
             //  Слоты бывают внутренние и внешние, создаем сразу оба типа
-            for (int LIndex = 0; LIndex < C_TotalSlotCount; LIndex++)
+            for (int LIndex = 0; LIndex <= C_TotalSlotCount; LIndex++)
             {
                 Landing LLanding = new Landing(LIndex, _SlotsArray, FSelf, LIndex > C_FightSlotCount);
                 FLanding[LIndex] = LLanding;
@@ -616,7 +616,7 @@ namespace Planetar
                 // Расположем на орбите
                 if (!LSlot.IsLowOrbit)
                 {
-                    LOrbitCount = C_FightSlotCount;
+                    LOrbitCount = C_FightSlotCount+1;
                     LRange = C_FightSlotRange;
                 }
                 else
