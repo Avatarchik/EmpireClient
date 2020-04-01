@@ -26,13 +26,13 @@ namespace Planetar
         private Ship FShip;
         private float FTime;
 
-        void Update()
+        private void Update()
         {
             if ((FShip != null) && (FTime + 0.5f >= Time.time))
                 doshow();
         }
 
-        void doshow()
+        private void doshow()
         {
             OwnerName.text = FShip.Owner.Name;
             Type.text = FShip.ShipType.ToString();
@@ -52,17 +52,17 @@ namespace Planetar
             LText += "Топливо: " + FShip.Fuel;
             if (FShip.Timer(ShipTimer.Refill) > 0)
                 LText += " (" + SSHLocale.SecondsToString(FShip.Timer(ShipTimer.Refill) - Mathf.RoundToInt(Time.time)) + ")\r\n";
-                else
+            else
                 LText += "\r\n";
 
-            if (FShip.Timer(ShipTimer.SkConstructor) > 0)
-                LText += "Constructor: (" + SSHLocale.SecondsToString(FShip.Timer(ShipTimer.SkConstructor) - Mathf.RoundToInt(Time.time)) + ")\r\n";
+            if (FShip.Timer(ShipTimer.Constructor) > 0)
+                LText += "Constructor: (" + SSHLocale.SecondsToString(FShip.Timer(ShipTimer.Constructor) - Mathf.RoundToInt(Time.time)) + ")\r\n";
 
             LText += "Убито: " + FShip.Destructed + "\r\n";
             LText += "В группе: " + FShip.Group + "\r\n";
             LText += "Инициатор: " + FShip.Script.IsActive + "\r\n";
             LText += "Состояние: " + FShip.State + ", Режим: " + FShip.Mode + "\r\n\r\n";
-            
+
             if (FShip.Weapon(ShipWeaponType.Left).Ship != null)
                 LText += "Левое орудие: " + FShip.Weapon(ShipWeaponType.Left).Ship.UID + ", " + FShip.Weapon(ShipWeaponType.Left).Ship.ShipType + "\r\n";
             if (FShip.Weapon(ShipWeaponType.Right).Ship != null)

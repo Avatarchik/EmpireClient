@@ -29,26 +29,38 @@ namespace Planetar
     // Типы доступных таймеров
     public enum ShipTimer
     {
-        // Постройка
+        /// <summary>
+        /// Операция постройки
+        /// </summary>
         Construction,
-        // Прыжок в портал
+        /// <summary>
+        /// Операция прыжка в портал
+        /// </summary>
         PortalJump,
-        // Дозаправка
+        /// <summary>
+        /// Операция дозаправки
+        /// </summary>
         Refill,
-        // Полет
+        /// <summary>
+        /// Операция полета
+        /// </summary>
         Flight,
-        // Парковка
-        Parking,
-        // Аннигиляция
-        OpAnnihilation,
-        // Самопочинка
-        OpFix,
-        // Ремонт союзника
-        OpRepair,
-        // Скилл разбора юнита
-        SkConstructor,
-        // Пустая заглушка
-        Empty
+        /// <summary>
+        /// Операция аннигиляции
+        /// </summary>
+        Annihilation,
+        /// <summary>
+        /// Операция самопочинки
+        /// </summary>
+        Fix,
+        /// <summary>
+        /// Операция ремонта союзника
+        /// </summary>
+        Repair,
+        /// <summary>
+        /// Кулдаун скилла разбора юнита
+        /// </summary>
+        Constructor
     }
 
     // Типы боевых снарядов
@@ -177,33 +189,46 @@ namespace Planetar
     // Состояние корабля
     public enum ShipState
     {
-        // Стоит
-        Iddle,
-        // Перемещение в рамках одной планеты
-        MovingLocal,
-        // Перемещение между разными планетами
-        MovingGlobal,
-        // Паркуется
-        Parking,
-        // Готовится прыгнуть в портал
-        PortalJump,
-        // Запустилась аннигиляция
-        Annihilation
+        /// <summary>
+        /// Заблокирован для использования
+        /// </summary>
+        Disabled,
+        /// <summary>
+        /// Активен
+        /// </summary>
+        Available,
+        /// <summary>
+        /// Доступен к активации
+        /// </summary>
+        Interactive
     }
 
     // Режим состояния корабля
     public enum ShipMode
     {
-        // Активен
+        /// <summary>
+        /// Активен
+        /// </summary>
         Active,
-        // Заблокирован флотом
+        /// <summary>
+        /// Блокирован с краев
+        /// </summary>
         Blocked,
-        // Нет места для активации
+        /// <summary>
+        /// Лимит для активации
+        /// </summary>
         Full,
-        // В походном режиме
-        Offline,
-        // Строится
-        Construct
+        /// <summary>
+        /// Походный режим
+        /// </summary>
+        Offline
+    }
+
+    internal enum ShipFlyType
+    {
+        Parking,
+        Local,
+        Global
     }
 
     // Описание деталей корабля
@@ -373,7 +398,7 @@ namespace Planetar
             if (!Tech(ShipTech.SkillConstructor).Supported)
                 return ActionState.Hidden;
             else
-                return (Timer(ShipTimer.SkConstructor) == 0) ? ActionState.Enabled : ActionState.Disabled;
+                return (Timer(ShipTimer.Constructor) == 0) ? ActionState.Enabled : ActionState.Disabled;
         }
 
         private void CallActionMoveToHangar()
@@ -474,13 +499,13 @@ namespace Planetar
         // Признак того, что кораблем можно управлять
         public bool IsAvail()
         {
-            return (State == ShipState.Iddle) || (State == ShipState.Parking);
+            return (State == ShipState.Available) || (State == ShipState.Interactive);
         }
 
         // Признак того, что корабль в полете
         public bool IsMove()
         {
-            return (State == ShipState.MovingLocal) || (State == ShipState.MovingGlobal);
+            return Timer(ShipTimer.Flight) > 0;
         }
 
         // Включение или выключение линии пути следования

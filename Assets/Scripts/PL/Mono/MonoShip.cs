@@ -130,7 +130,7 @@ namespace Planetar
         // Учет хоткея
         protected override void DoOnOver()
         {
-            if ((FSelf.State == ShipState.Iddle) && (!FSelf.Planet.InBattle))
+            if ((FSelf.State == ShipState.Available) && (!FSelf.Planet.InBattle))
                 CheckHotkeyOver();
         }
 
@@ -501,13 +501,13 @@ namespace Planetar
         private void ShowCornerState()
         {
             // При стройке или в походке нечего мигать, ибо ваистину
-            if ((FSelf.Mode == ShipMode.Construct) || (FSelf.Mode == ShipMode.Offline) || (FSelf.State == ShipState.Annihilation))
+            if ((FSelf.Mode == ShipMode.Blocked) || (FSelf.Mode == ShipMode.Offline) || (FSelf.State == ShipState.Disabled))
             {
                 _CountCorner.gameObject.SetActive(false);
                 return;
             }
             // Не мигаем только если избыток или не в покое
-            if ((FSelf.State == ShipState.Iddle) && (FSelf.Mode != ShipMode.Full))
+            if ((FSelf.State == ShipState.Available) && (FSelf.Mode != ShipMode.Full))
             {
                 _CountCorner.gameObject.SetActive(true);
                 return;
@@ -566,11 +566,11 @@ namespace Planetar
         {
             int LTime;
             // Определим с какого таймера брать данные
-            if (FSelf.State == ShipState.PortalJump)
+            if (FSelf.Timer(ShipTimer.PortalJump) > 0)
                 LTime = FSelf.Timer(ShipTimer.PortalJump);
-            else if (FSelf.State == ShipState.Annihilation)
-                LTime = FSelf.Timer(ShipTimer.OpAnnihilation);
-            else if (FSelf.Mode == ShipMode.Construct)
+            else if (FSelf.Timer(ShipTimer.Annihilation) > 0)
+                LTime = FSelf.Timer(ShipTimer.Annihilation);
+            else if (FSelf.Timer(ShipTimer.Construction) > 0)
                 LTime = FSelf.Timer(ShipTimer.Construction);
             else
                 return;
@@ -621,10 +621,10 @@ namespace Planetar
             MoveToLanding(APlanet, ASlot);
             // Определим скорость полета
             float LRange = Vector3.Distance(LSavePosition, FSelf.Transform.position);
-            if (FSelf.State == ShipState.MovingLocal)
-                FFLySpeed = C_FlySpeed * (LRange / C_SpeedInternal);
-            else
-                FFLySpeed = C_FlySpeed * (LRange / C_SpeedExternalL);
+            /* if (FSelf.State == ShipState.MovingLocal)*/
+            FFLySpeed = C_FlySpeed * (LRange / C_SpeedInternal);
+            /*else
+                FFLySpeed = C_FlySpeed * (LRange / C_SpeedExternalL);*/
             // Выставим на предыдущее место для имитации полета
             FSelf.Transform.position = LSavePosition;
         }
@@ -657,21 +657,21 @@ namespace Planetar
         public void UpdateState()
         {
             // Включена постройка
-            if (FSelf.Mode == ShipMode.Construct)
+            if (FSelf.Timer(ShipTimer.Constructor) > 0)
             {
                 FOperationsPanel = FSelf.Transform.Find("Skills").Find("Construct").gameObject;
                 FOperationsPanel.gameObject.SetActive(true);
                 _Timer.transform.gameObject.SetActive(true);
             }
             // Включен прыжок в портал
-            else if (FSelf.State == ShipState.PortalJump)
+            else if (FSelf.Timer(ShipTimer.PortalJump) > 0)
             {
                 FOperationsPanel = FSelf.Transform.Find("Skills").Find("Portal").gameObject;
                 FOperationsPanel.gameObject.SetActive(true);
                 _Timer.transform.gameObject.SetActive(true);
             }
             // Включена аннигиляция
-            else if (FSelf.State == ShipState.Annihilation)
+            else if (FSelf.Timer(ShipTimer.Annihilation) > 0)
             {
                 FOperationsPanel = FSelf.Transform.Find("Skills").Find("Annihilation").gameObject;
                 FOperationsPanel.gameObject.SetActive(true);
