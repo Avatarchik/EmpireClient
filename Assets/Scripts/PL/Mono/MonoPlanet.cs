@@ -205,8 +205,6 @@ namespace Planetar
                     // Показ радиуса для текущей планеты
                     ShowRadius(FSelf == LShip.Planet);
                 }
-                //  else
-                //    _FogActive.enabled = false;
             }
             else
             // Не показываем ячейки если на планету никто не претендует или если планета неактивна
@@ -397,7 +395,7 @@ namespace Planetar
             // Переключим туманы        
 
             // Сменим видимость интерактивных элементов
-            _UI.gameObject.SetActive(true/*LVisible*/);
+            _UI.gameObject.SetActive(LVisible);
         }
 
         private void DoShowSphere(bool AValue)
@@ -709,6 +707,11 @@ namespace Planetar
                 else
                     _FogPassive.color = Color.gray;
             }
+
+            /**/
+            _FogActive.enabled = FSelf.VisibleHard;
+            _FogPassive.enabled = true;
+                
         }
 
         // Обновление владельца планеты

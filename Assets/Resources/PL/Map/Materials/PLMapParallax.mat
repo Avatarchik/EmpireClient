@@ -19,14 +19,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Background:
         m_Texture: {fileID: 2800000, guid: 2b9e659974ce28048b9dbb1f78edb82b, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.26493332, y: -0.05420367}
+        m_Offset: {x: 0.09284893, y: -0.056047205}
     - _BigStars:
         m_Texture: {fileID: 2800000, guid: 14cbbc28871aa1641b6024904e65eb47, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 1.5896, y: -0.32522202}
+        m_Offset: {x: 0.55709356, y: -0.33628324}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -34,11 +38,16 @@ Material:
     - _MediumStars:
         m_Texture: {fileID: 2800000, guid: 71c51eec81d61194ca2452b3cd6610db, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 0.7948, y: -0.16261101}
+        m_Offset: {x: 0.27854678, y: -0.16814162}
     - _SmallStars:
         m_Texture: {fileID: 2800000, guid: 4f3946552a8b41846abaca31c761d687, type: 3}
         m_Scale: {x: 4, y: 4}
-        m_Offset: {x: 0.52986664, y: -0.10840734}
-    m_Floats: []
+        m_Offset: {x: 0.18569785, y: -0.11209441}
+    m_Floats:
+    - PixelSnap: 0
+    - _Blur: 0.001
+    - _EnableExternalAlpha: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

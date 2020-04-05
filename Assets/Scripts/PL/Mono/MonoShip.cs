@@ -501,7 +501,7 @@ namespace Planetar
         private void ShowCornerState()
         {
             // При стройке или в походке нечего мигать, ибо ваистину
-            if ((FSelf.Mode == ShipMode.Blocked) || (FSelf.Mode == ShipMode.Offline) || (FSelf.State == ShipState.Disabled))
+            if ((FSelf.Mode == ShipMode.Blocked) || (FSelf.Mode == ShipMode.Offline))
             {
                 _CountCorner.gameObject.SetActive(false);
                 return;
