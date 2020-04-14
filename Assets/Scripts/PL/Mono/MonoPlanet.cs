@@ -614,7 +614,7 @@ namespace Planetar
                 // Расположем на орбите
                 if (!LSlot.IsLowOrbit)
                 {
-                    LOrbitCount = C_FightSlotCount+1;
+                    LOrbitCount = C_FightSlotCount + 1;
                     LRange = C_FightSlotRange;
                 }
                 else
@@ -636,18 +636,18 @@ namespace Planetar
         {
             FSelf.Name = FSelf.UID.ToString();
             // Для пустого имени убираем меш
-           // if (FSelf.Name.Length == 0)
-          //  {
-          //      if (_OwnerName.gameObject.activeSelf)
-          //          _OwnerName.gameObject.SetActive(false);
-          //  }
-           // else
+            // if (FSelf.Name.Length == 0)
+            //  {
+            //      if (_OwnerName.gameObject.activeSelf)
+            //          _OwnerName.gameObject.SetActive(false);
+            //  }
+            // else
             {
                 // Смену имени проводим если планета называется по ругму или кем-то захвачена
-              //  if ((FSelf.PlanetType == PlanetType.Big) || (FSelf.PlanetType == PlanetType.Small))
-                    _OwnerName.text = FSelf.Class.ToString() + "\r\n<color=\"#" + ColorUtility.ToHtmlStringRGB(_OwnerLevel.color) + "\">" + FSelf.Name + "</color>";
-               // else
-               //     _OwnerName.text = FSelf.Name;
+                //  if ((FSelf.PlanetType == PlanetType.Big) || (FSelf.PlanetType == PlanetType.Small))
+                _OwnerName.text = FSelf.Class.ToString() + "\r\n<color=\"#" + ColorUtility.ToHtmlStringRGB(_OwnerLevel.color) + "\">" + FSelf.Name + "</color>";
+                // else
+                //     _OwnerName.text = FSelf.Name;
                 _OwnerName.gameObject.SetActive(true);
             }
         }
@@ -699,19 +699,15 @@ namespace Planetar
                 _MinimapControl.sprite = SpriteManager.MinimapPlanetControl(FSelf);
             if (AWar)
                 _MinimapWar.sprite = SpriteManager.MinimapPlanetWar(false, false, false);
-            // Для контроля полностью скрываем вражескую территорию
-            if (FSelf.State == PlanetState.Inactive)
-            {
-                if ((FSelf.IsCoverageEnemy) || (FSelf.IsTiming))
-                    _FogPassive.color = Color.black;
-                else
-                    _FogPassive.color = Color.gray;
-            }
 
-            /**/
+            if (FSelf.Owner.Role == SSHRole.Self)
+                _FogPassive.color = Color.white;
+            else
+                _FogPassive.color = Color.gray;
+
             _FogActive.enabled = FSelf.VisibleHard;
-            _FogPassive.enabled = true;
-                
+            _FogPassive.enabled = !FSelf.VisibleHard && (FSelf.VisibleSoft || !FSelf.IsCoverageEnemy);
+
         }
 
         // Обновление владельца планеты

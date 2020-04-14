@@ -42,9 +42,13 @@ namespace Planetar
         /// </summary>
         Refill,
         /// <summary>
+        /// Операция перелета
+        /// </summary>
+        FlightLocal,
+        /// <summary>
         /// Операция полета
         /// </summary>
-        Flight,
+        FlightGlobal,
         /// <summary>
         /// Операция аннигиляции
         /// </summary>
@@ -505,7 +509,7 @@ namespace Planetar
         // Признак того, что корабль в полете
         public bool IsMove()
         {
-            return Timer(ShipTimer.Flight) > 0;
+            return Timer(ShipTimer.FlightGlobal) > 0 || Timer(ShipTimer.FlightLocal) > 0;
         }
 
         // Включение или выключение линии пути следования
