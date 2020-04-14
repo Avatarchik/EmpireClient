@@ -272,7 +272,7 @@ namespace Planetar
                 else
                     return true;
             }
-            return false;
+            return true;/* false;*/
         }
 
         // Разрешение выхода из элемента-источника
@@ -286,6 +286,7 @@ namespace Planetar
         protected override bool DoOnClick()
         {
             Debug.Log("planet click");
+            DoPlanetClick();
             return true;
         }
 
@@ -307,6 +308,9 @@ namespace Planetar
                     Engine.ShipGroup.Run(FSelf);
                 return false;
             }
+
+            DoPlanetClick();
+
             return true;
         }
 
@@ -484,8 +488,8 @@ namespace Planetar
             else if (LSource == Interactive.ObjectType.PortalShip)
                 DoPortalPrepare();
             // Иначе проверим на возможность клика
-            else
-                DoPlanetDrag(true);*/
+            else*/
+                DoPlanetDrag(true);
         }
 
         // Отправка сведений для открытия портала
@@ -531,8 +535,8 @@ namespace Planetar
             /*if ((FShowingAccept != TShowingAction.Show) || (SSHShared.MonoSource != null))
                 return;*/
             // Покажем детали планеты
-            /*if (AMouseUp)
-                Engine.UIPlanetDetails.Show(FSelf);
+            if (AMouseUp)
+                Engine.UIPlanetDetails.Show(FSelf);/*
             // Или начнем протягивание пути
             else if ((FSelf.ControlEnemy == 0)
                 && (FSelf.Type != PlanetType.Hole)
