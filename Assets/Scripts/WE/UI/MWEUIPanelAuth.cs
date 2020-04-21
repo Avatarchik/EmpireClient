@@ -139,7 +139,7 @@ public class MWEUIPanelAuth : MSHUIMonoBehavior
     {
         DoSaveSettings(EditPassword.text, FCookie);
         DoShowLogin(true);
-        SSHConnection.TestServer = TestServer.isOn;
+        SSHConnection.DebugServer = TestServer.isOn;
         SSHConnection.ServerConnect();
     }
 

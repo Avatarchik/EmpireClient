@@ -75,13 +75,13 @@ namespace Planetar
             int LCount;
             int LActiveCount;
             // В больших 2 пустых, в маленьких 1 пустой, в остальных слотов нет
-            if (FPlanet.PlanetType == PlanetType.Big)
+            if (FPlanet.PlanetMode == PlanetMode.Big)
             {
                 LCount = C_SLOT_COUNT_BIG;
                 LActiveCount = LCount - 2;
             }
             else
-                if (FPlanet.PlanetType == PlanetType.Small)
+                if (FPlanet.PlanetMode == PlanetMode.Normal)
                 {
                     LCount = C_SLOT_COUNT_SMALL;
                     LActiveCount = LCount - 1;
@@ -99,7 +99,7 @@ namespace Planetar
                 // Меняем только те здания, которые показываются, скрытые не чистим
                 if (LIndex < LCount)
                 {
-                    if ((FPlanet.PlanetType == PlanetType.Small) && (LIndex < C_SLOT_COUNT_SMALL))
+                    if ((FPlanet.PlanetMode == PlanetMode.Normal) && (LIndex < C_SLOT_COUNT_SMALL))
                         LPosition = FCoordBy7[LIndex];
                     else
                         LPosition = FCoordBy10[LIndex];

@@ -54,8 +54,14 @@ public class SRTcpClient
         try
         {
             // Координаты сервера
-            IPAddress LIPAddress = IPAddress.Parse("127.0.0.1");
-            IPEndPoint LRemoteEP = new IPEndPoint(LIPAddress, APort);
+            IPAddress[] LIPAddresses = Dns.GetHostAddresses(AHostName);
+            IPAddress LIPAdress = null;
+            foreach (IPAddress tmpAddress in LIPAddresses)
+            {
+                if (tmpAddress.AddressFamily == AddressFamily.InterNetwork)
+                    LIPAdress = tmpAddress;
+            }
+            IPEndPoint LRemoteEP = new IPEndPoint(LIPAdress, APort);
             // Новый сокет
             Socket LSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)
             {

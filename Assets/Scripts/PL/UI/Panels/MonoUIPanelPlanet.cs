@@ -41,7 +41,7 @@ namespace Planetar
         // Смена количества слотов для построек
         private void UpdateBuildings()
         {
-            Buildings.ChangeData(FActivePlanet, FActivePlanet.Owner.Role, FActivePlanet.IsManned ? 12 : 8);
+            Buildings.ChangeData(FActivePlanet, FActivePlanet.Owner.Role, FActivePlanet.PlanetMode == PlanetMode.Big ? 12 : 8);
         }
 
         // Обновление слотов хранилища
@@ -65,8 +65,8 @@ namespace Planetar
         {
             if (FActivePlanet != APlanet)
                 return;
-            Construct.ChangeData(APlanet.ModulesCount, FActivePlanet.Owner.Role == SSHRole.Self, 
-                FActivePlanet.ShipyardsCount > 0, FActivePlanet.IsManned);
+            Construct.ChangeData(APlanet.ModulesCount, FActivePlanet.Owner.Role == SSHRole.Self,
+                FActivePlanet.ShipyardsCount > 0, FActivePlanet.PlanetType == PlanetType.Earth);
         }
 
         // Обновление текстовок
@@ -85,7 +85,7 @@ namespace Planetar
                     LColor = SSHLocale.IntToColor(0xFF8E0090); break;
             }
 
-            if (FActivePlanet.IsManned)
+            if (FActivePlanet.PlanetType == PlanetType.Earth)
                 Owner.text = FActivePlanet.Class.ToString() + " <color=\"#" + ColorUtility.ToHtmlStringRGB(LColor) + "\">" + FActivePlanet.Name + "</color>";
             else
                 Owner.text = "<color=\"#CBCC3C\">" + FActivePlanet.PlanetType.ToString() + "</color>";
@@ -108,7 +108,7 @@ namespace Planetar
         public void Show()
         {
             // Энергия есть только у жилых планет
-            EnergyPanel.SetActive(FActivePlanet.IsManned);
+            EnergyPanel.SetActive(FActivePlanet.PlanetType == PlanetType.Earth);
             // Обновим описание
             UpdateDescription();
             // Обнулим параметры построек

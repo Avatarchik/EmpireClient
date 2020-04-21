@@ -240,7 +240,8 @@ namespace Planetar
                 int LPosX = FReader.ReadInt32();
                 int LPosY = FReader.ReadInt32();
                 int LType = FReader.ReadInt32();
-                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType)
+                int LMode = FReader.ReadInt32();
+                Planet LPlanet = new Planet(LUID, Engine.UIBattlefield, LPosX, LPosY, (PlanetType)LType, (PlanetMode)LMode)
                 {
                     Owner = SSHShared.FindPlayer(FReader.ReadInt32()),
                     State = (PlanetState)FReader.ReadInt32(),
@@ -249,7 +250,6 @@ namespace Planetar
                     IsCoverageSelf = FReader.ReadBoolean(),
                     IsCoverageFriends = FReader.ReadBoolean(),
                     IsCoverageEnemy = FReader.ReadBoolean(),
-                    IsBigHole = FReader.ReadBoolean()
                 };
                 LPlanet.Allocate();
             }
@@ -385,9 +385,8 @@ namespace Planetar
         {
             int LPlanet = FReader.ReadInt32();
             PlanetState LPlanetState = (PlanetState)FReader.ReadInt32();
-            bool LIsBigHole = FReader.ReadBoolean();
 
-            PlanetByUID(LPlanet).UpdateState(LPlanetState, LIsBigHole);
+            PlanetByUID(LPlanet).UpdateState(LPlanetState);
         }
 
         private void DoReadPlanetStateTime()

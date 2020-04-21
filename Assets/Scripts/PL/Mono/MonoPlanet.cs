@@ -170,7 +170,7 @@ namespace Planetar
                 // Ландинг только на активных планетоидах
                 if (FSelf.State == PlanetState.Active)
                 {
-                    if ((FSelf.IsBigHole) || ((!FSelf.IsTiming) && (!FSelf.InBattle)
+                    if ((FSelf.PlanetType==PlanetType.Hole && FSelf.PlanetMode == PlanetMode.Big) || ((!FSelf.IsTiming) && (!FSelf.InBattle)
                         && ((!FSelf.IsCoverageEnemy) || (FSelf.Owner.Role == SSHRole.Friend) || (FSelf.Owner.Role == SSHRole.Self))))
                     {
                         LHangarApproove = true;
@@ -710,7 +710,7 @@ namespace Planetar
                 _FogPassive.color = Color.gray;
 
             _FogActive.enabled = FSelf.VisibleHard;
-            _FogPassive.enabled = !FSelf.VisibleHard && (FSelf.VisibleSoft || !FSelf.IsCoverageEnemy);
+            _FogPassive.enabled = !FSelf.VisibleHard && (FSelf.VisibleSoft || (!FSelf.IsCoverageEnemy && FSelf.PlanetType!=PlanetType.Hole));
 
         }
 

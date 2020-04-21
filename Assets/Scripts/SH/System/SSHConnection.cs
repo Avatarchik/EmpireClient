@@ -24,14 +24,16 @@ public static class SSHConnection
     // Сокет для взаимодействия
     public static SRTcpClient Socket;
     // Признак тестового сервера
-    public static bool TestServer;
+    public static bool DebugServer;
 
     // Порт сервера
-    private const int FSocketPortDefault = 25599;
+    private const int FSocketPortRelease = 25600;
     // Порт тестового сервера
-    private const int FSocketPortTest = 25600;
+    private const int FSocketPortDebug = 25599;
     // Адрес сервера
-    private const string FSocketServer = "galaxyhopes.ru";
+    private const string FSocketServerRelease = "galaxyhopes.ru";
+    // Адрес сервера
+    private const string FSocketServerDebug = "localhost";
     // Очередь полученных сообщений 
     private static Queue FQueue;
     // Объект для реализации блокировки очереди сообщений
@@ -89,9 +91,9 @@ public static class SSHConnection
     // Попытка соединиться с сервером
     public static void ServerConnect()
     {
-        if (!TestServer)
-            Socket.Connect(FSocketServer, FSocketPortDefault);
+        if (DebugServer)
+            Socket.Connect(FSocketServerDebug, FSocketPortDebug);
         else
-            Socket.Connect(FSocketServer, FSocketPortTest);
+            Socket.Connect(FSocketServerRelease, FSocketPortRelease);
     }
 }

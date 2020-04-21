@@ -39,7 +39,10 @@ namespace Planetar
                 else
                     OwnerName.text = "Неизвестно";
 
-                string LDescription = "Номер в реестре: " + APlanet.UID.ToString() + "\r\n";
+                string LDescription = "Номер в реестре: " + APlanet.UID.ToString() + " ("
+                                                          + APlanet.PlanetType + ", "
+                                                          + APlanet.PlanetMode + ", "
+                                                          + APlanet.State + ")\r\n";
 
                 LDescription += "В бою: " + APlanet.InBattle.ToString() + "\r\n";
                 LDescription += "Захват: " + APlanet.CaptureValue.ToString() + "\r\n";
@@ -48,8 +51,8 @@ namespace Planetar
                     LDescription += "Видимость: полная \r\n";
                 if (APlanet.VisibleSoft)
                     LDescription += "Видимость: окраина\r\n";
-                if (APlanet.IsBigHole)
-                    LDescription += "Видимость: черная дыра\r\n";
+                if (APlanet.PlanetType == PlanetType.Hole && APlanet.PlanetMode == PlanetMode.Big)
+                    LDescription += "Видимость: большая черная дыра\r\n";
                 if (APlanet.IsBigEdge)
                     LDescription += "Видимость: окраина черной дыры\r\n";
                 LDescription += "\r\n";

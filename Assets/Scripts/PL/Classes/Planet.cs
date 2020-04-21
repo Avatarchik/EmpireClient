@@ -14,18 +14,6 @@ using UnityEngine;
 
 namespace Planetar
 {
-    // Типы планетоидов
-    public enum PlanetType
-    {
-        Small,         // Маленька
-        Big,           // Большая
-        Sun,           // Солнце
-        Hydro,         // Газовик
-        Rock,          // Карлик
-        Hole,          // Черная дыра
-        Pulsar         // Пульсар
-    }
-
     // Класс поселения
     public enum PlanetClass
     {
@@ -34,12 +22,92 @@ namespace Planetar
         Manufacture    // Колония (с производством)
     }
 
-    // Состояние планеты
+    /// <summary>
+    /// Таймеры планеты
+    /// </summary>
+    internal enum PlanetTimer
+    {
+        /// <summary>
+        /// Боевой тик
+        /// </summary>
+        Battle,
+        /// <summary>
+        /// Захват лояльности
+        /// </summary>
+        Capture,
+        /// <summary>
+        /// Тик смены состояния
+        /// </summary>
+        Activity,
+        /// <summary>
+        /// Активен гравитационный потенциал после аннигиляции
+        /// </summary>
+        LowGravity
+    }
+
+    /// <summary>
+    /// Состояние планетоида
+    /// </summary>
     public enum PlanetState
     {
-        Active,        // Активный планетоид
-        Activation,    // Планетоид активируется
-        Inactive       // Планетоид неактивен
+        /// <summary>
+        /// Активен
+        /// </summary>
+        Active,
+        /// <summary>
+        /// Активируется
+        /// </summary>
+        Activation,
+        /// <summary>
+        /// Неактивен
+        /// </summary>
+        Inactive
+    }
+
+    /// <summary>
+    /// Типы планет
+    /// </summary>
+    public enum PlanetType
+    {
+        /// <summary>
+        /// Маленькая
+        /// </summary>
+        Earth,
+        /// <summary>
+        /// Звезда
+        /// </summary>
+        Sun,
+        /// <summary>
+        /// Гидросостав
+        /// </summary>
+        Hydro,
+        /// <summary>
+        /// Карлик
+        /// </summary>
+        Rock,
+        /// <summary>
+        /// Черная дыра
+        /// </summary>
+        Hole,
+        /// <summary>
+        /// Пульсар
+        /// </summary>
+        Pulsar
+    }
+
+    /// <summary>
+    /// Режим планеты
+    /// </summary>
+    public enum PlanetMode
+    {
+        /// <summary>
+        /// Обычная
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// Большая
+        /// </summary>
+        Big
     }
 
     // Тип подписки на действия на планете
@@ -50,6 +118,7 @@ namespace Planetar
         Enabled
     }
 
+
     // Тип внешнего класса описания планетоида
     public class Planet : Shared.Interactive
     {
@@ -57,6 +126,7 @@ namespace Planetar
         public Player Owner;
         // Тип планетоида
         public PlanetType PlanetType;
+        public PlanetMode PlanetMode;
         // Имя планетоида
         public string Name;
         // Класс планеты
@@ -106,13 +176,9 @@ namespace Planetar
         // Портал
         public Portal Portal;
         // Признак наличия боя на планете
-        public bool InBattle;
-        // Признак БЧТ
-        public bool IsBigHole;
+        public bool InBattle;        
         // Признак окраины БЧТ
         public bool IsBigEdge;
-        // Признак обитаемой планеты
-        public bool IsManned;
         // Признак тайминговой планеты
         public bool IsTiming;
         // Общий компонент хинта
@@ -131,14 +197,14 @@ namespace Planetar
         }
 
         // Конструктор сразу определяет тип данных
-        public Planet(int AUID, Transform AParent, int APosX, int APosY, PlanetType AType)
+        public Planet(int AUID, Transform AParent, int APosX, int APosY, PlanetType AType, PlanetMode aMode)
         {
             UID = AUID;
             Name = string.Empty;
             PlanetType = AType;
+            PlanetMode = aMode;
             /* выенсти в функции */
             IsTiming = (PlanetType == PlanetType.Hole) || (PlanetType == PlanetType.Pulsar);
-            IsManned = (PlanetType == PlanetType.Big) || (PlanetType == PlanetType.Small);
             Ships = new List<Ship>();
             Links = new List<Planet>();
             Buildings = new BuildingType[10];
@@ -147,8 +213,8 @@ namespace Planetar
             Transform = PrefabManager.CreatePlanet(LPosition).transform;
             Transform.SetParent(AParent, false);
             FScript = Transform.GetComponent<MonoPlanet>();
-            FScript._Sphere = PrefabManager.CreatePlanetSphere(AType);
-            FScript._Sphere.transform.SetParent(Transform, false);            
+            FScript._Sphere = PrefabManager.CreatePlanetSphere(AType, aMode);
+            FScript._Sphere.transform.SetParent(Transform, false);
             FSubScript = FScript._Sphere.GetComponent<MonoPlanetCustom>();
         }
 
@@ -161,7 +227,7 @@ namespace Planetar
         // Признак видимой и активной планеты
         public bool IsVisible()
         {
-            return IsBigHole || IsBigEdge || VisibleHard || VisibleSoft;
+            return (PlanetType == PlanetType.Hole && PlanetMode == PlanetMode.Big) || IsBigEdge || VisibleHard || VisibleSoft;
         }
 
         // Возврат объекта слота планеты по его индексу
@@ -178,23 +244,9 @@ namespace Planetar
         }
 
         // Обновление состояния планеты, видимое всем игрокам для БЧТ
-        public void UpdateState(PlanetState AState, bool AIsBigHole)
+        public void UpdateState(PlanetState AState)
         {
-            // Обновим параметры соседних планет для БЧТ
-            if (PlanetType == PlanetType.Hole)
-            {
-                foreach (Planet LPlanet in Links)
-                {
-                    if (LPlanet.PlanetType == PlanetType.Hole)
-                        continue;
-                    LPlanet.IsBigEdge = AIsBigHole;
-                    // Выключим планету с окраины
-                    if (!LPlanet.IsVisible())
-                        LPlanet.SetActive(false);
-                }
-            }
             // Обновим параметры
-            IsBigHole = AIsBigHole;
             State = AState;
             // Обновим состояние скрипта
             FScript.UpdateState();

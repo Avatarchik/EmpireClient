@@ -27,7 +27,7 @@ namespace Planetar
             if (FSpritesShips == null)
                 FSpritesShips = Resources.LoadAll<Sprite>("PL/Ship/Shared/Textures/PLShipPanel");
             // Смещение спрайтов
-            int LSpriteOffset = (((short)ARace - 1) * ((int)ShipType.Flagship+1)) + (short)AShipType - 1;
+            int LSpriteOffset = (((short)ARace - 1) * ((int)ShipType.Flagship + 1)) + (short)AShipType - 1;
             // Вернуть иконку корабля
             return FSpritesShips[LSpriteOffset];
         }
@@ -60,7 +60,7 @@ namespace Planetar
 
         // Спрайт миникарты для владельца планеты
         public static Sprite MinimapPlanetCore(Planet APlanet)
-        {       
+        {
             string LSprite = null;
             // Временное решение сокрытия роли без отписки
             SSHRole LRole;
@@ -71,13 +71,13 @@ namespace Planetar
             // Не показываем неактивные ЧТ
             if ((APlanet.PlanetType == PlanetType.Hole) && (APlanet.State == PlanetState.Inactive))
                 return null;
-            else if (APlanet.PlanetType == PlanetType.Big)
+            else if (APlanet.PlanetType == PlanetType.Earth && APlanet.PlanetMode == PlanetMode.Big)
                 LSprite = "PL/Radar/Textures/PLRadarMapCore" + LRole.ToString() + "Big";
             else if (APlanet.PlanetType == PlanetType.Pulsar)
                 LSprite = "PL/Planet/" + APlanet.PlanetType.ToString() + "/Textures/PLPlanet" + APlanet.PlanetType.ToString() + "Minimap";
             else if (APlanet.PlanetType == PlanetType.Hole)
             {
-                if (APlanet.IsBigHole)
+                if (APlanet.PlanetMode == PlanetMode.Big)
                 {
                     if (APlanet.State == PlanetState.Active)
                         LSprite = "PL/Planet/" + APlanet.PlanetType.ToString() + "/Textures/PLPlanet" + APlanet.PlanetType.ToString() + "MinimapActive";

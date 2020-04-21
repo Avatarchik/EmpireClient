@@ -103,29 +103,34 @@ namespace Planetar
         }
 
         // Создание префаба сферы планетарной планеты
-        public static GameObject CreatePlanetSphere(PlanetType APlanetType)
+        public static GameObject CreatePlanetSphere(PlanetType APlanetType, PlanetMode aMode)
         {
             string LPrefabPath = "PL/Planet/";
             int LSkinID;
             string LPrefabPlanetSphereType = APlanetType.ToString();
             // Временное украшательство
-            if (APlanetType == PlanetType.Big)
+            if (APlanetType == PlanetType.Earth && aMode == PlanetMode.Big)
+            {
+                LPrefabPlanetSphereType = "Big";
                 LSkinID = Random.Range(1, 4);
+            }
+            else if (APlanetType == PlanetType.Earth && aMode == PlanetMode.Normal)
+            {
+                LPrefabPlanetSphereType = "Small";
+                LSkinID = Random.Range(1, 4);
+            }
             else
-                if (APlanetType == PlanetType.Small)
-                    LSkinID = Random.Range(1, 4);
-                else
                     if (APlanetType == PlanetType.Hydro)
-                        LSkinID = Random.Range(1, 3);
-                    else
+                LSkinID = Random.Range(1, 3);
+            else
                         if (APlanetType == PlanetType.Sun)
-                            LSkinID = 2;
-                        else
-                            LSkinID = 1;
+                LSkinID = 2;
+            else
+                LSkinID = 1;
             string LPrefabPlanetSphere = LPrefabPlanetSphereType + "/pfPLPlanetSphere" + LPrefabPlanetSphereType + LSkinID.ToString();
             return Create(LPrefabPath + LPrefabPlanetSphere, Vector3.zero);
         }
-        
+
         // Создание префаба снаряда планетарного корабля
         public static GameObject CreateShell(Transform AParent, Vector3 APosition, ShipShellType AShellType)
         {
