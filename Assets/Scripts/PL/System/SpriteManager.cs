@@ -64,7 +64,7 @@ namespace Planetar
             string LSprite = null;
             // Временное решение сокрытия роли без отписки
             SSHRole LRole;
-            if (!APlanet.IsVisible())
+            if (!APlanet.IsVisible() && APlanet.PlanetType != PlanetType.Hole)
                 LRole = SSHRole.Neutral;
             else
                 LRole = APlanet.Owner.Role;

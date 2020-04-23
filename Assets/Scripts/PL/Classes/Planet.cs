@@ -61,7 +61,11 @@ namespace Planetar
         /// <summary>
         /// Неактивен
         /// </summary>
-        Inactive
+        Inactive,
+        /// <summary>
+        /// Заблокирован для изменения
+        /// </summary>
+        Blocked
     }
 
     /// <summary>
@@ -176,7 +180,7 @@ namespace Planetar
         // Портал
         public Portal Portal;
         // Признак наличия боя на планете
-        public bool InBattle;        
+        public bool InBattle;
         // Признак окраины БЧТ
         public bool IsBigEdge;
         // Признак тайминговой планеты
@@ -251,6 +255,8 @@ namespace Planetar
             // Обновим состояние скрипта
             FScript.UpdateState();
             SetActive(AState != PlanetState.Inactive);
+
+            FScript.UpdateMinimap(true, false, false);
         }
 
         // Обновление времени планеты, видимое подписчикам
