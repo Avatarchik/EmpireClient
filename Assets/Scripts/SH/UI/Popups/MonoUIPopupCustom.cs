@@ -22,6 +22,7 @@ namespace Shared
         // Показ меню
         public void Show(Interactive AObject)
         {
+            return;
             // При первом показе определим параметры
             if (FSelf == null)
             {
